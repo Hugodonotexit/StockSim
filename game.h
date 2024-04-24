@@ -13,13 +13,20 @@ using namespace sf;
 class Game
 {
 private:
-    //Var
+    //Window
     RenderWindow *window;
     VideoMode videoMode;
     Event keyEvent;
+
+    //Mouse position
+    Vector2i mousePosWin;
+
+    //Var
     double randSeed;
+
+
     //Objects
-    RectangleShape;
+    
 
     //Functions
     void initVar();
@@ -31,6 +38,8 @@ public:
 
     //Functions
     const bool getWinIsOpen();
+    void randUpdate();
+    void mousePosUpdate();
     void eventUpdate(); //check keys input
     void update();
     void render();

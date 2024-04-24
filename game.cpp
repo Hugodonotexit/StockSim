@@ -8,12 +8,34 @@ Game::~Game() { delete this->window; }
 
 // Public Functions
 const bool Game::getWinIsOpen() { return this->window->isOpen(); }
+
+void Game::randUpdate() {
+  // set randSeed base on mouse position
+  if (rand() % 2 == 0) {
+    this->randSeed +=
+        (this->mousePosWin.x *
+         this->mousePosWin.y);  
+  } else {
+    this->randSeed *=
+        (this->mousePosWin.x /
+         this->mousePosWin.y); 
+  }
+
+  // reset randSeed base on time
+  if (sizeof(this->randSeed) > (sizeof(double) * 0.95)) {
+    this->randSeed = time(nullptr);  
+  }
+  srand(this->randSeed);
+}
+
+void Game::mousePosUpdate() {
+  this->mousePosWin.x = Mouse::getPosition(*this->window).x;
+  this->mousePosWin.y = Mouse::getPosition(*this->window).y;
+}
+
 void Game::eventUpdate() {
   // check keys input
   while (this->window->pollEvent(this->keyEvent)) {
-    this->randSeed += (this->keyEvent.mouseMove.x *
-                       this->keyEvent.mouseMove.y);  // set randSeed
-    srand(this->randSeed);
     switch (keyEvent.type) {
       case Event::Closed:
         window->close();
@@ -24,17 +46,16 @@ void Game::eventUpdate() {
           case Keyboard::Escape:
             window->close();
             break;
-          default:
-            this->randSeed /= (this->keyEvent.mouseMove.x * (1000 + rand()) +
-                               this->keyEvent.mouseMove.y /
-                                   abs((1 - rand())));  // set randSeed
-            break;
         }
         break;
     }
   }
 }
-void Game::update() { this->eventUpdate(); }
+void Game::update() {
+  this->eventUpdate();
+  this->mousePosUpdate();
+  this->randUpdate();
+}
 void Game::render() {
   // clear flame
   // render game objects
@@ -50,7 +71,7 @@ void Game::initVar() {
   this->randSeed = time(nullptr);
 }
 void Game::initWin() {
-  this->window =
-      new RenderWindow(this->videoMode.getDesktopMode(), "Stock Sim", Style::Fullscreen);
-  this->window->setVerticalSyncEnabled(true);
+  this->window = new RenderWindow(this->videoMode.getDesktopMode(),
+                                  "Stock Sim" /*, Style::Fullscreen*/);
+  this->window->setFramerateLimit(60);
 }
