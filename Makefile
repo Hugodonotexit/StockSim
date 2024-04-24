@@ -2,7 +2,7 @@ CC=g++
 CXXFLAGS=-Wall  # Add any compiler-specific flags (e.g., optimization or warning flags)
 LDFLAGS= 
 LIBS=-lsfml-graphics -lsfml-window -lsfml-system
-SRC=main.cpp  # List all source files here
+SRC=main.cpp game.h game.cpp  # List all source files here
 OBJ=$(SRC:.cpp=.o)  # Convert source filenames from .cpp to .o
 DEPS=  
 TARGET=StockSim
