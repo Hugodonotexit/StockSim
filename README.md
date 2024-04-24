@@ -1,5 +1,6 @@
 # OOPStock
-=====================================
+
+
 ### Markets:
 ---------------------------
 
@@ -13,7 +14,7 @@ Bond
 
 (Future, CFD) -- if we have time
 
-=====================================
+
 ### Factors:
 ---------------------------
 
@@ -28,4 +29,4 @@ Flash carsh
 company event (lay off, financial report, stock split, Diviends)
 
 ...
-=====================================
+
