@@ -8,11 +8,10 @@ Stock
 
 Forex
 
-Option
 
 Bond
 
-(Future, CFD) -- if we have time
+(Option, Future, CFD) -- if we have time
 
 
 ### Factors:
