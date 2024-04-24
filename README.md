@@ -8,6 +8,7 @@ Stock
 
 Forex
 
+crypto
 
 Bond
 
