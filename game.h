@@ -38,7 +38,6 @@ public:
 
     //Functions
     const bool getWinIsOpen();
-    void randUpdate();
     void mousePosUpdate();
     void eventUpdate(); //check keys input
     void update();

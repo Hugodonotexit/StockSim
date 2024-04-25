@@ -1,22 +1,18 @@
 #ifndef FOREX_H
 #define FOREX_H
 #include "asset.h"
+#include "../randomGen.h"
 #include <string>
 
 class forex: public asset
 {
-private:
-    
 public:
-    forex();
-    float updatePrice() {
-        float changePercent = (rand() % 100 - 50) * 0.005; // Random change between -0.25% to 0.25%
+    forex() {};
+    void updatePrice() {
+        float changePercent = randomGen(0, 0.3) / 100;
         asset::setPrice(asset::getPrice() * (1 + changePercent));
     };
-    void setPrice(float newPrice) {
-        asset::setPrice(newPrice);
-    };
-    ~forex();
+    ~forex() {};
 };
 
 #endif

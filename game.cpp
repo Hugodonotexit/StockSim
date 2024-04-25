@@ -9,25 +9,6 @@ Game::~Game() { delete this->window; }
 // Public Functions
 const bool Game::getWinIsOpen() { return this->window->isOpen(); }
 
-void Game::randUpdate() {
-  // set randSeed base on mouse position
-  if (rand() % 2 == 0) {
-    this->randSeed +=
-        (this->mousePosWin.x *
-         this->mousePosWin.y);  
-  } else {
-    this->randSeed *=
-        (this->mousePosWin.x /
-         this->mousePosWin.y); 
-  }
-
-  // reset randSeed base on time
-  if (sizeof(this->randSeed) >= (sizeof(double) * 0.95)) {
-    this->randSeed = time(nullptr);  
-  }
-  srand(this->randSeed);
-}
-
 void Game::mousePosUpdate() {
   this->mousePosWin.x = Mouse::getPosition(*this->window).x;
   this->mousePosWin.y = Mouse::getPosition(*this->window).y;
@@ -40,11 +21,17 @@ void Game::eventUpdate() {
       case Event::Closed:
         window->close();
         break;
+      default:
+        /*keep emptry*/
+        break;
 
       case Event::KeyPressed:
         switch (keyEvent.key.code) {
           case Keyboard::Escape:
             window->close();
+            break;
+          default:
+            /*keep emptry*/
             break;
         }
         break;
@@ -54,7 +41,6 @@ void Game::eventUpdate() {
 void Game::update() {
   this->eventUpdate();
   this->mousePosUpdate();
-  this->randUpdate();
 }
 void Game::render() {
   // clear flame
@@ -71,7 +57,7 @@ void Game::initVar() {
   this->randSeed = time(nullptr);
 }
 void Game::initWin() {
-  this->window = new RenderWindow(this->videoMode.getDesktopMode(),
-                                  "Stock Sim", Style::Fullscreen);
+  this->window = new RenderWindow(this->videoMode.getDesktopMode(), "Stock Sim",
+                                  Style::Fullscreen);
   this->window->setFramerateLimit(60);
 }
