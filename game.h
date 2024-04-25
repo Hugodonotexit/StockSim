@@ -1,4 +1,4 @@
-//Game front end
+//Game engine
 #ifndef GAME_H
 #define GAME_H
 
@@ -7,23 +7,42 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <ctime>
+#include "asset/asset.h"
+#include "asset/crypto.h"
+#include "asset/forex.h"
+#include "asset/stock.h"
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <iostream>
 
 using namespace sf;
 
 class Game
 {
 private:
-    //Var
-    RenderWindow *window;
+    //Window
+    RenderWindow *window = nullptr;;
     VideoMode videoMode;
     Event keyEvent;
-    double randSeed;
+
+    //Mouse position
+    Vector2i mousePosWin;
+
+    //Var
+    Asset** cryptos = nullptr;;
+    Asset** forexs = nullptr;;
+    Asset** stocks = nullptr;;
+    int numStocks;
+    int numCryptos;
+    int numForexs;
+
     //Objects
-    RectangleShape;
+    
 
     //Functions
-    void initVar();
     void initWin();
+    void initAsset();
 
 public:
     Game();
@@ -31,6 +50,7 @@ public:
 
     //Functions
     const bool getWinIsOpen();
+    void mousePosUpdate();
     void eventUpdate(); //check keys input
     void update();
     void render();
