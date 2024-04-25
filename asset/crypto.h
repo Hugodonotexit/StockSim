@@ -12,7 +12,7 @@ public:
     Crypto(std::string newName, std::string newTicker, float newPrice, unsigned long long newCirculatingAmount)
         : Asset(newName, newTicker, newPrice), circulatingAmount(newCirculatingAmount) {};
     void updatePrice() {
-        float changePercent = randomGen(0, 3) / 100;
+        float changePercent = randomGen(-0.1, 3) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
 };

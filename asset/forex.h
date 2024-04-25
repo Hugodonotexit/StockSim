@@ -1,3 +1,4 @@
+/*
 #ifndef FOREX_H
 #define FOREX_H
 #include "asset.h"
@@ -17,3 +18,4 @@ public:
 };
 
 #endif
+*/

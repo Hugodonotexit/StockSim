@@ -31,11 +31,11 @@ private:
 
     //Var
     Asset** cryptos = nullptr;;
-    Asset** forexs = nullptr;;
+    //Asset** forexs = nullptr;;
     Asset** stocks = nullptr;;
     int numStocks;
     int numCryptos;
-    int numForexs;
+    //int numForexs;
 
     //Objects
     

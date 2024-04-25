@@ -10,17 +10,19 @@ Game::~Game() {
   {
     delete cryptos[i];
   }
+  /*
   for (int i = 0; i < this->numForexs; i++)
   {
     delete forexs[i];
   }
+  */
   for (int i = 0; i < this->numStocks; i++)
   {
     delete stocks[i];
   }
   
   delete[] this->cryptos;
-  delete[] this->forexs;
+  //delete[] this->forexs;
   delete[] this->stocks;
   }
 
@@ -37,7 +39,7 @@ void Game::eventUpdate() {
   while (this->window->pollEvent(this->keyEvent)) {
     switch (keyEvent.type) {
       case Event::Closed:
-        window->close();
+        this->window->close();
         break;
       default:
         /*keep emptry*/
@@ -46,7 +48,7 @@ void Game::eventUpdate() {
       case Event::KeyPressed:
         switch (keyEvent.key.code) {
           case Keyboard::Escape:
-            window->close();
+            this->window->close();
             break;
           default:
             /*keep emptry*/
@@ -86,6 +88,7 @@ void Game::initAsset() {
 
   if (!stock_file) {
     std::cerr << "Failed to open stocks file." << std::endl;
+    this->window->close();
     return;
   }
 
@@ -116,6 +119,7 @@ void Game::initAsset() {
 
   if (!crypto_file) {
     std::cerr << "Failed to open cryptos file." << std::endl;
+    this->window->close();
     return;
   }
   
@@ -137,6 +141,7 @@ void Game::initAsset() {
     cryptos[i] = new Crypto(name, ticker, price, circulatingAmount);
   }
 
+  /*
   //forex
   std::ifstream forex_file("db/forexs.txt");
   std::string forex_line;
@@ -144,6 +149,7 @@ void Game::initAsset() {
 
   if (!forex_file) {
     std::cerr << "Failed to open forexs file." << std::endl;
+    this->window->close();
     return;
   }
 
@@ -165,5 +171,5 @@ void Game::initAsset() {
     iss >> name >> ticker >> price;
     forexs[i] = new Forex(name, ticker, price);
   }
-
+  */
 };

@@ -10,12 +10,12 @@ LDFLAGS=-fsanitize=address
 LIBS=-lsfml-graphics -lsfml-window -lsfml-system
 
 # Source files
-SRC=main.cpp game.cpp randomGen.cpp layout/list.cpp layout/listItem.cpp layout/tab.cpp
+SRC=main.cpp game.cpp layout/list.cpp layout/listItem.cpp layout/tab.cpp layout/error.cpp
 
 # Headers files (used only for dependency tracking, not for compiling or cleaning)
 DEPS=game.h randomGen.h \
      asset/asset.h asset/crypto.h asset/forex.h asset/stock.h \
-     layout/list.h layout/listItem.h layout/tab.h
+     layout/list.h layout/listItem.h layout/tab.h layout/error.h
 
 # Convert source filenames from .cpp to .o
 OBJ=$(SRC:.cpp=.o)  

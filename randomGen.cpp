@@ -1,8 +1,0 @@
-#include "randomGen.h"
-
-float randomGen(float mean, float stdDev) {
-    std::random_device randSeed;  
-    std::mt19937 gen(randSeed()); 
-    std::normal_distribution<> dist(mean, stdDev); 
-    return dist(gen);
-}
