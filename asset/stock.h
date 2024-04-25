@@ -4,15 +4,18 @@
 #include "../randomGen.h"
 #include <string>
 
-class stock: public asset
+class Stock: public Asset
 {
+    private:
+    std::string sector;
+    unsigned long long circulatingShares;
    public:
-    stock() {};
+    Stock(std::string newSector, std::string newName, std::string newTicker, float newPrice, unsigned long long newCirculatingShares)
+        : Asset(newName, newTicker, newPrice), sector(newSector), circulatingShares(newCirculatingShares) {};
     void updatePrice() {
         float changePercent = randomGen(0, 0.9) / 100;
-        asset::setPrice(asset::getPrice() * (1 + changePercent));
+        Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
-    ~stock() {};
 };
 
 #endif

@@ -4,17 +4,17 @@
 #include "../randomGen.h"
 #include <string>
 
-class crypto: public asset
+class Crypto: public Asset
 {
 private:
-    
+    unsigned long long circulatingAmount;
 public:
-    crypto() {};
+    Crypto(std::string newName, std::string newTicker, float newPrice, unsigned long long newCirculatingAmount)
+        : Asset(newName, newTicker, newPrice), circulatingAmount(newCirculatingAmount) {};
     void updatePrice() {
         float changePercent = randomGen(0, 3) / 100;
-        asset::setPrice(asset::getPrice() * (1 + changePercent));
+        Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
-    ~crypto() {};
 };
 
 #endif

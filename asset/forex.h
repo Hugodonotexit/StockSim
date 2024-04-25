@@ -4,15 +4,16 @@
 #include "../randomGen.h"
 #include <string>
 
-class forex: public asset
+class Forex: public Asset
 {
 public:
-    forex() {};
+    Forex(std::string newName, std::string newTicker, float newPrice)
+        : Asset(newName, newTicker, newPrice) {};
+    using Asset::Asset;
     void updatePrice() {
         float changePercent = randomGen(0, 0.3) / 100;
-        asset::setPrice(asset::getPrice() * (1 + changePercent));
+        Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
-    ~forex() {};
 };
 
 #endif

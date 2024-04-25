@@ -7,6 +7,13 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <ctime>
+#include "asset/asset.h"
+#include "asset/crypto.h"
+#include "asset/forex.h"
+#include "asset/stock.h"
+#include <fstream>
+#include <sstream>
+#include <string>
 
 using namespace sf;
 
@@ -23,6 +30,9 @@ private:
 
     //Var
     double randSeed;
+    Asset** cryptos;
+    Asset** forexs;
+    Asset** stocks;
 
 
     //Objects
@@ -31,6 +41,7 @@ private:
     //Functions
     void initVar();
     void initWin();
+    void initAsset();
 
 public:
     Game();

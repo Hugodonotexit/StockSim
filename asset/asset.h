@@ -3,15 +3,14 @@
 #include <string>
 #include "../randomGen.h"
 
-class asset
+class Asset
 {
 private:
     std::string ticker, name;
-    float oldPrice;
-    float price;
+    float oldPrice, price;
 public:
-    asset(): name("NULL"), ticker("NULL"), price(-1) {};
-    asset(std::string newName, std::string newTicker, float newPrice): name(newName), ticker(newTicker), price(newPrice) {};
+    Asset(): name("NULL"), ticker("NULL"), price(-1) {};
+    Asset(std::string newName, std::string newTicker, float newPrice): name(newName), ticker(newTicker), price(newPrice) {};
     float getPrice() const {return this->price;};
     float getOldPrice() const {return this->oldPrice;};
     std::string getName() const {return this->name;};
@@ -25,7 +24,7 @@ public:
         asset::setPrice(asset::getPrice() * (1 + changePercent)); 
         return changePercent;*/
     };
-    ~asset() {};
+    virtual ~Asset() {};
 };
 
 #endif
