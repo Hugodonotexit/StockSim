@@ -1,4 +1,4 @@
-//Game front end
+//Game engine
 #ifndef GAME_H
 #define GAME_H
 

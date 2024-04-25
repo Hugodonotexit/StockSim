@@ -22,7 +22,7 @@ void Game::randUpdate() {
   }
 
   // reset randSeed base on time
-  if (sizeof(this->randSeed) > (sizeof(double) * 0.95)) {
+  if (sizeof(this->randSeed) >= (sizeof(double) * 0.95)) {
     this->randSeed = time(nullptr);  
   }
   srand(this->randSeed);
@@ -72,6 +72,6 @@ void Game::initVar() {
 }
 void Game::initWin() {
   this->window = new RenderWindow(this->videoMode.getDesktopMode(),
-                                  "Stock Sim" /*, Style::Fullscreen*/);
+                                  "Stock Sim", Style::Fullscreen);
   this->window->setFramerateLimit(60);
 }

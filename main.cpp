@@ -4,12 +4,11 @@
 using namespace sf;
 
 int main() {
-  // Init Game front end
+  // Init Game engine
   Game stockSim;
 
   // Game loop
   while (stockSim.getWinIsOpen()) {
-    Event event;
     stockSim.update();
     stockSim.render();
   }

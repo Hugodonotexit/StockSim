@@ -13,9 +13,13 @@ public:
     float getPrice() const {return price;};
     std::string getName() const {return name;};
     std::string getTicker() const {return ticker;};
+    void setPrice(float newPrice) {
+        this->price = newPrice;
+    };
     virtual float updatePrice() {
-        float changePercent = (rand() % 100 - 50) * 0.01; // Random change between -0.5% to 0.5%
-        price *= (1 + changePercent);
+        /* float changePercent = (rand() % 100 - 50) * 0.01; // Random change between -0.5% to 0.5%
+        asset::setPrice(asset::getPrice() * (1 + changePercent)); */
+        return 0;
     };
     ~asset() {};
 };
