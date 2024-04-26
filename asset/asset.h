@@ -1,23 +1,30 @@
 #ifndef ASSET_H
 #define ASSET_H
 #include <string>
+#include "../randomGen.h"
 
-class asset
+class Asset
 {
 private:
-    std::string ticker, name;
-    float price;
+    std::string name, ticker;
+    float oldPrice, price;
 public:
-    asset(): name("NULL"), ticker("NULL"), price(-1) {};
-    asset(std::string newName, std::string newTicker, float newPrice): name(newName), ticker(newTicker), price(newPrice) {};
-    float getPrice() const {return price;};
-    std::string getName() const {return name;};
-    std::string getTicker() const {return ticker;};
-    virtual float updatePrice() {
-        float changePercent = (rand() % 100 - 50) * 0.01; // Random change between -0.5% to 0.5%
-        price *= (1 + changePercent);
+    Asset(): name("NULL"), ticker("NULL"), price(-1) {};
+    Asset(std::string newName, std::string newTicker, float newPrice): name(newName), ticker(newTicker), price(newPrice) {};
+    float getPrice() const {return this->price;};
+    float getOldPrice() const {return this->oldPrice;};
+    std::string getName() const {return this->name;};
+    std::string getTicker() const {return this->ticker;};
+    void setPrice(float newPrice) {
+        this->oldPrice = this->price;
+        this->price = newPrice;
     };
-    ~asset() {};
+    virtual void updatePrice() {
+        /* float changePercent = randomGen(0, 3) / 100;
+        asset::setPrice(asset::getPrice() * (1 + changePercent)); 
+        return changePercent;*/
+    };
+    virtual ~Asset() {};
 };
 
 #endif
