@@ -3,6 +3,7 @@
 Game::Game() {
   this->initWin();
   this->initAsset();
+  this->initEvents();
 }
 Game::~Game() { 
   delete this->window; 
@@ -20,10 +21,15 @@ Game::~Game() {
   {
     delete stocks[i];
   }
+  for (int i = 0; i < this->numEvents; i++)
+  {
+    delete events[i];
+  }
   
   delete[] this->cryptos;
   //delete[] this->forexs;
   delete[] this->stocks;
+  delete[] this->events;
   }
 
 // Public Functions
@@ -172,4 +178,36 @@ void Game::initAsset() {
     forexs[i] = new Forex(name, ticker, price);
   }
   */
+};
+
+void Game::initEvents() {
+  std::ifstream event_file("db/events.txt");
+  std::string nameID, discerption;
+  float eventImpactMean, eventImpactStdDev;
+  std::string event_line;
+  this->numEvents = 0;
+
+  if (!event_file) {
+    std::cerr << "Failed to open events file." << std::endl;
+    this->window->close();
+    return;
+  }
+
+  while (getline(event_file, event_line)) {
+    this->numEvents++;
+  }
+
+  events = new Events*[this->numEvents];
+
+  event_file.clear();
+  event_file.seekg(0, std::ios::beg);
+  
+  for (int i = 0; i < this->numEvents; i++)
+  {
+    getline(event_file, event_line);
+    std::istringstream iss(event_line);
+    std::string name, ticker;
+    iss >> nameID >> discerption >> eventImpactMean >> eventImpactStdDev;
+    events[i] = new Events(nameID, discerption, eventImpactMean, eventImpactStdDev);
+  }
 };
