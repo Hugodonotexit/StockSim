@@ -11,6 +11,7 @@
 #include "asset/crypto.h"
 #include "asset/forex.h"
 #include "asset/stock.h"
+#include "asset/events.h"
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -22,7 +23,7 @@ class Game
 {
 private:
     //Window
-    RenderWindow *window = nullptr;;
+    RenderWindow *window = nullptr;
     VideoMode videoMode;
     Event keyEvent;
 
@@ -30,11 +31,13 @@ private:
     Vector2i mousePosWin;
 
     //Var
-    Asset** cryptos = nullptr;;
-    //Asset** forexs = nullptr;;
-    Asset** stocks = nullptr;;
+    Asset** cryptos = nullptr;
+    //Asset** forexs = nullptr;
+    Asset** stocks = nullptr;
+    Events** events = nullptr;
     int numStocks;
     int numCryptos;
+    int numEvents;
     //int numForexs;
 
     //Objects
@@ -43,6 +46,7 @@ private:
     //Functions
     void initWin();
     void initAsset();
+    void initEvents();
 
 public:
     Game();

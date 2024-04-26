@@ -1,6 +1,7 @@
 #ifndef STOCK_H
 #define STOCK_H
 #include "asset.h"
+#include "events.h"
 #include "../randomGen.h"
 #include <string>
 
@@ -14,6 +15,10 @@ class Stock: public Asset
         : Asset(newName, newTicker, newPrice), sector(newSector), circulatingShares(newCirculatingShares) {};
     void updatePrice() {
         float changePercent = randomGen(0.25, 0.9) / 100;
+        Asset::setPrice(Asset::getPrice() * (1 + changePercent));
+    };
+    void updatePrice(double mean, double stdDev) {
+        float changePercent = randomGen(mean, stdDev) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
 };

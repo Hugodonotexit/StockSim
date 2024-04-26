@@ -1,6 +1,7 @@
 #ifndef CRYPTO_H
 #define CRYPTO_H
 #include "asset.h"
+#include "events.h"
 #include "../randomGen.h"
 #include <string>
 
@@ -13,6 +14,10 @@ public:
         : Asset(newName, newTicker, newPrice), circulatingAmount(newCirculatingAmount) {};
     void updatePrice() {
         float changePercent = randomGen(-0.1, 3) / 100;
+        Asset::setPrice(Asset::getPrice() * (1 + changePercent));
+    };
+    void updatePrice(double mean, double stdDev) {
+        float changePercent = randomGen(mean, stdDev) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
 };

@@ -24,6 +24,11 @@ public:
         asset::setPrice(asset::getPrice() * (1 + changePercent)); 
         return changePercent;*/
     };
+    virtual void updatePrice(double mean, double stdDev) {
+        /* float changePercent = randomGen(mean, stdDev) / 100;
+        asset::setPrice(asset::getPrice() * (1 + changePercent)); 
+        return changePercent;*/
+    };
     virtual ~Asset() {};
 };
 

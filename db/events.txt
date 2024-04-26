@@ -1,0 +1,50 @@
+GlobalEconomicBoom, Global economic boom boosts confidence in markets, 7.5, 1.2
+GlobalRecession, Global recession causes decline in markets, -6, 1.5
+InterestRateHike, Interest rate hike dampens investment, -3, 0.5
+InterestRateCut, Interest rate cut boosts investment, 4, 0.8
+TechInnovation, Breakthrough technology innovation enhances market position, 9, 2.0
+RegulationChange, New regulations impact the markets adversely, -4.5, 0.9
+RegulatoryApproval, Regulatory approval boosts market operations, 5, 1.1
+EnergyCrisis, Energy crisis affects operating costs for companies, -3.5, 0.7
+MarketCrash, Market crash severely impacts financial markets, -12, 3.0
+MarketRally, Market rally lifts all boats, 10, 2.5
+Acquisition, {} announces a strategic acquisition, 5.5, 1.3
+Divestiture, {} announces a divestiture of a major division, -4, 0.8
+StockSplit, {} executes a stock split, 3, 0.5
+Buyback, {} announces a stock buyback program, 4.5, 0.7
+DividendIncrease, {} increases its dividend, 2.5, 0.4
+DividendCut, {} cuts its dividend, -3, 0.6
+LaborStrike, Labor strike impacts operations at {}, -3.5, 1.0
+NewProductLaunch, {} launches a new product, 6, 1.5
+ProductRecall, {} recalls a defective product, -5.5, 1.2
+LegalVictory, {} wins a significant legal battle, 6.5, 1.4
+LegalDefeat, {} suffers a defeat in court, -6, 1.8
+SupplyChainIssue, Supply chain issues affect {}'s production, -2.5, 0.9
+Merger, {} announces a merger with another company, 8, 2.0
+CreditRatingUpgrade, {}'s credit rating is upgraded, 3.5, 0.6
+CreditRatingDowngrade, {}'s credit rating is downgraded, -4.5, 1.1
+UnexpectedResignation, Unexpected resignation of {}'s CFO, -3.2, 0.7
+HostileTakeoverAttempt, Hostile takeover attempt of {} unsettles investors, -4.8, 1.5
+ExpansionAnnouncement, {} announces expansion into new markets, 4.1, 1.0
+EnvironmentalSanction, {} faces sanctions due to environmental violations, -5.3, 1.2
+IndustryAward, {} wins a prestigious industry award, 2.9, 0.6
+ForkEvent, A significant fork occurs in {}, 3.5, 1.8
+HashRateIncrease, Hash rate increase for {} boosts security and investor confidence, 3.0, 0.9
+HashRateDrop, Hash rate drop for {} raises security concerns, -3.5, 1.0
+MajorAdoption, A major retailer starts accepting {} as payment, 6.5, 2.0
+RegulatoryCrackdown, New regulatorycrackdown on cryptocurrencies affects {}, -7.0, 2.1
+TechUpgrade, {} undergoes a major technical upgrade to improve scalability and efficiency, 5.0, 1.3
+NetworkAttack, {} suffers from a network attack, -6.0, 2.4
+CryptoPartnership, {} announces a partnership with a major financial institution, 4.8, 1.1
+CelebrityEndorsement, {} receives an endorsement from a high-profile celebrity, 4.2, 1.2
+GovernmentAdoption, A government adopts {} for official transactions, 8.0, 2.5
+QuantumThreat, Emerging quantum computing threats worry {} investors, -4.7, 1.6
+PrivacyConcerns, Privacy concerns arise affecting {}, -3.2, 0.8
+ScalingSolutionImplemented, A new scaling solution is implemented for {}, increasing transaction capacity, 5.7, 1.3
+MajorExchangeListing, {} is listed on a major cryptocurrency exchange, 6.2, 1.5
+ExchangeDelisting, {} is delisted from a major cryptocurrency exchange, -6.5, 1.9
+WalletHack, Major wallet hack impacts users of {}, -7.8, 2.2
+TokenBurn, {} conducts a significant token burn, reducing supply, 3.4, 1.0
+SmartContractFailure, A critical smart contract failure occurs on {}'s network, -8.0, 2.3
+InstitutionalInvestment, A major institution invests heavily in {}, 7.3, 1.8
+KeyDeveloperLeaves, Key developer leaves {}, sparking concerns about future developments, -4.5, 1.4

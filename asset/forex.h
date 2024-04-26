@@ -2,6 +2,7 @@
 #ifndef FOREX_H
 #define FOREX_H
 #include "asset.h"
+#include "events.h"
 #include "../randomGen.h"
 #include <string>
 
@@ -13,6 +14,10 @@ public:
     using Asset::Asset;
     void updatePrice() {
         float changePercent = randomGen(0, 0.3) / 100;
+        Asset::setPrice(Asset::getPrice() * (1 + changePercent));
+    };
+    void updatePrice(double mean, double stdDev) {
+        float changePercent = randomGen(mean, stdDev) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
 };
