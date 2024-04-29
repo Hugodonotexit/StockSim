@@ -12,6 +12,7 @@
 #include "asset/forex.h"
 #include "asset/stock.h"
 #include "asset/events.h"
+#include "gametime.h"
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -35,6 +36,7 @@ private:
     //Asset** forexs = nullptr;
     Asset** stocks = nullptr;
     Events** events = nullptr;
+    Gametime gametime;
     int numStocks;
     int numCryptos;
     int numEvents;
