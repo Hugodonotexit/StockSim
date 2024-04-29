@@ -5,10 +5,9 @@ Game::Game() {
   this->initAsset();
   this->initEvents();
 }
-Game::~Game() { 
-  delete this->window; 
-  for (int i = 0; i < this->numCryptos; i++)
-  {
+Game::~Game() {
+  delete this->window;
+  for (int i = 0; i < this->numCryptos; i++) {
     delete cryptos[i];
   }
   /*
@@ -17,20 +16,18 @@ Game::~Game() {
     delete forexs[i];
   }
   */
-  for (int i = 0; i < this->numStocks; i++)
-  {
+  for (int i = 0; i < this->numStocks; i++) {
     delete stocks[i];
   }
-  for (int i = 0; i < this->numEvents; i++)
-  {
+  for (int i = 0; i < this->numEvents; i++) {
     delete events[i];
   }
-  
+
   delete[] this->cryptos;
-  //delete[] this->forexs;
+  // delete[] this->forexs;
   delete[] this->stocks;
   delete[] this->events;
-  }
+}
 
 // Public Functions
 const bool Game::getWinIsOpen() { return this->window->isOpen(); }
@@ -47,19 +44,32 @@ void Game::eventUpdate() {
       case Event::Closed:
         this->window->close();
         break;
-      default:
-        /*keep emptry*/
-        break;
 
       case Event::KeyPressed:
         switch (keyEvent.key.code) {
           case Keyboard::Escape:
             this->window->close();
             break;
+          case Keyboard::Num0:
+          case Keyboard::P:
+            this->gametime.setTimeScale(0);
+            break;
+          case Keyboard::Num1:
+            this->gametime.setTimeScale(120);
+            break;
+          case Keyboard::Num2:
+            this->gametime.setTimeScale(720);
+            break;
+          case Keyboard::Num3:
+            this->gametime.setTimeScale(1440);
+            break;
           default:
             /*keep emptry*/
             break;
         }
+        break;
+      default:
+        /*keep emptry*/
         break;
     }
   }
@@ -67,6 +77,7 @@ void Game::eventUpdate() {
 void Game::update() {
   this->eventUpdate();
   this->mousePosUpdate();
+  this->gametime.updateTime();
 }
 void Game::render() {
   // clear flame
@@ -85,7 +96,7 @@ void Game::initWin() {
   this->window->setFramerateLimit(60);
 }
 void Game::initAsset() {
-  //stocks
+  // stocks
   std::ifstream stock_file("db/stocks.txt");
   std::string sector;
   std::string stock_line;
@@ -106,9 +117,8 @@ void Game::initAsset() {
 
   stock_file.clear();
   stock_file.seekg(0, std::ios::beg);
-  
-  for (int i = 0; i < this->numStocks; i++)
-  {
+
+  for (int i = 0; i < this->numStocks; i++) {
     getline(stock_file, stock_line);
     std::istringstream iss(stock_line);
     std::string name, ticker;
@@ -117,7 +127,7 @@ void Game::initAsset() {
     stocks[i] = new Stock(sector, name, ticker, price, circulatingShares);
   }
 
-  //crypto
+  // crypto
   std::ifstream crypto_file("db/cryptos.txt");
   std::string crypto_line;
   unsigned long long circulatingAmount;
@@ -128,7 +138,7 @@ void Game::initAsset() {
     this->window->close();
     return;
   }
-  
+
   while (getline(crypto_file, crypto_line)) {
     this->numCryptos++;
   }
@@ -136,9 +146,8 @@ void Game::initAsset() {
   cryptos = new Asset*[this->numCryptos];
   crypto_file.clear();
   crypto_file.seekg(0, std::ios::beg);
-  
-  for (int i = 0; i < this->numCryptos; i++)
-  {
+
+  for (int i = 0; i < this->numCryptos; i++) {
     getline(crypto_file, crypto_line);
     std::istringstream iss(crypto_line);
     std::string name, ticker;
@@ -167,7 +176,7 @@ void Game::initAsset() {
 
   forex_file.clear();
   forex_file.seekg(0, std::ios::beg);
-  
+
   for (int i = 0; i < this->numForexs; i++)
   {
     getline(forex_file, forex_line);
@@ -201,13 +210,13 @@ void Game::initEvents() {
 
   event_file.clear();
   event_file.seekg(0, std::ios::beg);
-  
-  for (int i = 0; i < this->numEvents; i++)
-  {
+
+  for (int i = 0; i < this->numEvents; i++) {
     getline(event_file, event_line);
     std::istringstream iss(event_line);
     std::string name, ticker;
     iss >> nameID >> discerption >> eventImpactMean >> eventImpactStdDev;
-    events[i] = new Events(nameID, discerption, eventImpactMean, eventImpactStdDev);
+    events[i] =
+        new Events(nameID, discerption, eventImpactMean, eventImpactStdDev);
   }
 };

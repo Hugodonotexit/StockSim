@@ -1,7 +1,7 @@
 # Compiler
 CC=g++
 # Compiler-specific flags
-CXXFLAGS=-Wall -fsanitize=address -std=c++20
+CXXFLAGS=-Wall -std=c++20
 
 # Add the sanitizer library to linkage if using sanitizers
 LDFLAGS=-fsanitize=address
@@ -10,10 +10,10 @@ LDFLAGS=-fsanitize=address
 LIBS=-lsfml-graphics -lsfml-window -lsfml-system
 
 # Source files
-SRC=main.cpp game.cpp layout/list.cpp layout/listItem.cpp layout/tab.cpp layout/error.cpp
+SRC=main.cpp game.cpp gametime.cpp layout/list.cpp layout/listItem.cpp layout/tab.cpp layout/error.cpp
 
 # Headers files (used only for dependency tracking, not for compiling or cleaning)
-DEPS=game.h randomGen.h \
+DEPS=game.h randomGen.h gametime.h\
      asset/asset.h asset/crypto.h asset/forex.h asset/stock.h \
      layout/list.h layout/listItem.h layout/tab.h layout/error.h
 
@@ -32,7 +32,7 @@ $(TARGET): $(OBJ)
 
 # Compile each source file to an object file
 %.o: %.cpp $(DEPS)
-	$(CC) -c -o $@ $< $(CXXFLAGS)
+	$(CC) -c -o $@ $< $(CXXFLAGS) $(LDFLAGS)
 
 # Clean rule to delete object files and the executable
 clean:
