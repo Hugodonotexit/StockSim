@@ -12,7 +12,7 @@
 #include "asset/forex.h"
 #include "asset/stock.h"
 #include "asset/events.h"
-#include "gametime.h"
+#include "function/gametime.h"
 #include <fstream>
 #include <sstream>
 #include <string>
