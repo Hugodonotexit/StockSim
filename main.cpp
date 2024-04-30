@@ -1,8 +1,6 @@
 #include <iostream>
 #include "game.h"
 
-using namespace sf;
-
 int main() {
   // Init Game engine
   Game stockSim;

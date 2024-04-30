@@ -10,11 +10,11 @@ LDFLAGS=-fsanitize=address
 LIBS=-lsfml-graphics -lsfml-window -lsfml-system
 
 # Source files
-SRC=main.cpp game.cpp function/gametime.cpp layout/list.cpp layout/listItem.cpp layout/tab.cpp layout/error.cpp
+SRC=main.cpp game.cpp function/gametime.cpp function/randomGen.cpp function/player.cpp layout/list.cpp layout/listItem.cpp layout/tab.cpp layout/error.cpp
 
 # Headers files (used only for dependency tracking, not for compiling or cleaning)
 DEPS=game.h \
-	 function/randomGen.h function/gametime.h\
+	 function/randomGen.h function/gametime.h function/player.h \
      asset/asset.h asset/crypto.h asset/forex.h asset/stock.h \
      layout/list.h layout/listItem.h layout/tab.h layout/error.h
 
@@ -29,11 +29,11 @@ all: $(TARGET)
 
 # Link the target executable
 $(TARGET): $(OBJ)
-	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
+	$(CC) -o $@ $^ $(CXXFLAGS) $(LDFLAGS) $(LIBS)
 
 # Compile each source file to an object file
 %.o: %.cpp $(DEPS)
-	$(CC) -c -o $@ $< $(CXXFLAGS) $(LDFLAGS)
+	$(CC) -c -o $@ $< $(CXXFLAGS) $(LDFLAGS) $(LIBS)
 
 # Clean rule to delete object files and the executable
 clean:
