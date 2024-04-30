@@ -24,7 +24,7 @@ Game::~Game() {
   }
 
   delete[] this->cryptos;
-  // delete[] this->forexs;
+  //delete[] this->forexs;
   delete[] this->stocks;
   delete[] this->events;
 }
