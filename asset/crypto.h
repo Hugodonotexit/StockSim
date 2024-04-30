@@ -20,6 +20,11 @@ public:
         float changePercent = randomGen(mean, stdDev) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
+
+    // used for sorting the set of cryptos such that the lists tickers are in alphabetical order
+    bool operator<(const Crypto& other) const {
+        return this->getTicker() < other.getTicker(); 
+    }
 };
 
 #endif

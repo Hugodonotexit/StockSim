@@ -21,6 +21,11 @@ class Stock: public Asset
         float changePercent = randomGen(mean, stdDev) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
+    
+    // used for sorting the set of stocks such that the lists tickers are in alphabetical order
+    bool operator<(const Stock& other) const {
+        return this->getTicker() < other.getTicker(); 
+    }
 };
 
 #endif
