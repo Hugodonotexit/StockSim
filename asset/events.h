@@ -19,6 +19,4 @@ public:
     ~Events() {};
 };
 
-
-
 #endif

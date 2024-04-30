@@ -20,12 +20,14 @@ public:
         this->price = newPrice;
     };
     virtual void updatePrice() {
-        /* float changePercent = randomGen(0, 3) / 100;
+        /* randomGen rnd;
+        float changePercent = rnd.priceRandomGen(0, 3) / 100;
         asset::setPrice(asset::getPrice() * (1 + changePercent)); 
         return changePercent;*/
     };
     virtual void updatePrice(double mean, double stdDev) {
-        /* float changePercent = randomGen(mean, stdDev) / 100;
+        /* randomGen rnd;
+        float changePercent = rnd.priceRandomGen(mean, stdDev) / 100;
         asset::setPrice(asset::getPrice() * (1 + changePercent)); 
         return changePercent;*/
     };

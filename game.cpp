@@ -78,13 +78,14 @@ void Game::update() {
   this->eventUpdate();
   this->mousePosUpdate();
   this->gametime.updateTime();
+  this->player.updateMargin();
 }
 void Game::render() {
   // clear flame
+  this->window->clear(Color(121, 164, 113, 200));  // Main background colour 
   // render game objects
+  
   // display flame
-  this->window->clear(Color(121, 164, 113, 200));  // Main background colour
-
   this->window->display();
 }
 
