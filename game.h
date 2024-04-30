@@ -13,6 +13,7 @@
 #include "asset/stock.h"
 #include "asset/events.h"
 #include "function/gametime.h"
+#include "function/player.h"
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -31,12 +32,15 @@ private:
     //Mouse position
     Vector2i mousePosWin;
 
-    //Var
+    //Class
     Asset** cryptos = nullptr;
     //Asset** forexs = nullptr;
     Asset** stocks = nullptr;
     Events** events = nullptr;
     Gametime gametime;
+    Player player;
+
+    //Var
     int numStocks;
     int numCryptos;
     int numEvents;
