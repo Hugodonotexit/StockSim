@@ -36,8 +36,9 @@ Game::~Game() {
 const bool Game::getWinIsOpen() { return this->window->isOpen(); }
 
 void Game::mousePosUpdate() {
-  this->mousePosWin.x = Mouse::getPosition(*this->window).x;
-  this->mousePosWin.y = Mouse::getPosition(*this->window).y;
+  this->mousePosWin = Mouse::getPosition(*this->window);
+  this->mousePosView = this->window->mapPixelToCoords(this->mousePosWin);
+
 }
 
 void Game::eventUpdate() {
@@ -55,19 +56,19 @@ void Game::eventUpdate() {
             break;
           case Keyboard::Num0:
           case Keyboard::P:
-            this->gametime.setTimeScale(0);
+            this->gametime.setTimeScaleIndex(0);
             break;
           case Keyboard::Num1:
-            this->gametime.setTimeScale(4);
+            this->gametime.setTimeScaleIndex(1);
             break;
           case Keyboard::Num2:
-            this->gametime.setTimeScale(8);
+            this->gametime.setTimeScaleIndex(2);
             break;
           case Keyboard::Num3:
-            this->gametime.setTimeScale(16);
+            this->gametime.setTimeScaleIndex(3);
             break;
           case Keyboard::Num4:
-            this->gametime.setTimeScale(32);
+            this->gametime.setTimeScaleIndex(4);
             break;
           default:
             /*keep emptry*/
@@ -77,6 +78,17 @@ void Game::eventUpdate() {
       default:
         /*keep emptry*/
         break;
+    }
+  }
+  /*
+  Change time speed with mouse
+  Vector2f(35.f, 35.f) sprite offset
+  */
+  if (Mouse::isButtonPressed(Mouse::Left)) {
+    for (int i = 0; i < TIMECHANGE_MODE; i++) {
+      if (this->timeChange[i].getGlobalBounds().contains(this->mousePosView - Vector2f(35.f, 35.f))) {
+        this->gametime.setTimeScaleIndex(i);
+      }
     }
   }
 }
@@ -108,8 +120,7 @@ void Game::initWin() {
                                   Style::Fullscreen);
   this->window->setFramerateLimit(60);
 
-  if (!this->openSans.loadFromFile("font/Opensans/OpenSans-Regular.ttf"))
-  {
+  if (!this->openSans.loadFromFile("font/Opensans/OpenSans-Regular.ttf")) {
     std::cerr << "Failed to open OpenSans-Regular.ttf file." << std::endl;
     this->window->close();
   }
@@ -123,7 +134,7 @@ void Game::initWin() {
 void Game::initBox() {
   // Text & font
   this->boxInfoContainer = new RenderTexture();
-  this->boxInfoContainer->create(310,190);
+  this->boxInfoContainer->create(310, 190);
   for (int i = 0; i < INFOTEXT_LINE; i++) {
     this->infoText[i].setFont(this->pixeBoy);
     this->infoText[i].setFillColor(Color::Black);
@@ -131,8 +142,24 @@ void Game::initBox() {
     this->infoText[i].setString("NULL");
     this->infoText[i].setPosition(Vector2f(20.f, 10.f + 32 * i));
   }
+
+  for (int i = 0; i < TIMECHANGE_MODE; i++) {
+    this->timeChange[i].setFont(this->pixeBoy);
+    this->timeChange[i].setFillColor(Color::Black);
+    this->timeChange[i].setCharacterSize(32);
+    this->timeChange[i].setString("NULL");
+    this->timeChange[i].setPosition(
+        Vector2f(20.f + 40 * i + 6 * (i - 1) * (i - 1), 145.f));
+  }
+
+  this->timeChange[0].setString("||");
+  this->timeChange[1].setString(">");
+  this->timeChange[2].setString(">>");
+  this->timeChange[3].setString(">>>");
+  this->timeChange[4].setString(">>>>");
+
   this->sprite = new Sprite(this->boxInfoContainer->getTexture());
-  this->sprite->setPosition(Vector2f(35.f,35.f));
+  this->sprite->setPosition(Vector2f(35.f, 35.f));
 
   this->boxInfo.setSize(Vector2f(300.f, 180.f));
   this->boxInfo.setOutlineThickness(6);
@@ -141,7 +168,7 @@ void Game::initBox() {
   this->boxInfo.setPosition(Vector2f(10.f, 10.f));
 }
 
-void Game::updateText(){
+void Game::updateText() {
   std::stringstream ss;
 
   ss << "Name: " << player.getName();
@@ -155,19 +182,26 @@ void Game::updateText(){
   ss << "Margin: $" << player.getMargin();
   this->infoText[2].setString(ss.str());
   ss.str("");
-  
-  ss << std::setw(2) << std::setfill('0') << gametime.getDay() << "/" << std::setw(2) << std::setfill('0') << gametime.getMonth() << "/" << std::setw(2) << std::setfill('0') << gametime.getYear() /*<< "  " << std::setw(2) << std::setfill('0') << gametime.getHour() << ":" << std::setw(2) << std::setfill('0') << gametime.getMinute()*/ ;
+
+  ss << std::setw(2) << std::setfill('0') << gametime.getDay() << "/"
+     << std::setw(2) << std::setfill('0') << gametime.getMonth() << "/"
+     << std::setw(2) << std::setfill('0')
+     << gametime.getYear() /*<< "  " << std::setw(2) << std::setfill('0') <<
+                              gametime.getHour() << ":" << std::setw(2) <<
+                              std::setfill('0') << gametime.getMinute()*/
+      ;
   this->infoText[3].setString(ss.str());
   ss.str("");
-
-  this->infoText[4].setString("||   >   >>   >>>   >>>>");
 };
-void Game::renderText(RenderTarget &target) { 
-  for (int i = 0; i < INFOTEXT_LINE; i++)
-  {
-    target.draw(this->infoText[i]); 
+void Game::renderText(RenderTarget &target) {
+  for (int i = 0; i < INFOTEXT_LINE; i++) {
+    target.draw(this->infoText[i]);
   }
+
+  for (int i = 0; i < TIMECHANGE_MODE; i++) {
+    target.draw(this->timeChange[i]);
   }
+}
 
 void Game::initAsset() {
   // stocks
