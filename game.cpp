@@ -8,6 +8,8 @@ Game::Game() {
 }
 Game::~Game() {
   delete this->window;
+  delete this->boxInfoContainer;
+  delete this->sprite;
   for (int i = 0; i < this->numCryptos; i++) {
     delete cryptos[i];
   }
@@ -25,7 +27,7 @@ Game::~Game() {
   }
 
   delete[] this->cryptos;
-  //delete[] this->forexs;
+  // delete[] this->forexs;
   delete[] this->stocks;
   delete[] this->events;
 }
@@ -56,13 +58,16 @@ void Game::eventUpdate() {
             this->gametime.setTimeScale(0);
             break;
           case Keyboard::Num1:
-            this->gametime.setTimeScale(120);
+            this->gametime.setTimeScale(4);
             break;
           case Keyboard::Num2:
-            this->gametime.setTimeScale(720);
+            this->gametime.setTimeScale(8);
             break;
           case Keyboard::Num3:
-            this->gametime.setTimeScale(1440);
+            this->gametime.setTimeScale(16);
+            break;
+          case Keyboard::Num4:
+            this->gametime.setTimeScale(32);
             break;
           default:
             /*keep emptry*/
@@ -80,16 +85,20 @@ void Game::update() {
   this->mousePosUpdate();
   this->gametime.updateTime();
   this->player.updateMargin();
+  this->updateText();
 }
 void Game::render() {
   // clear flame
-  this->window->clear(Color(121, 164, 113));  // Main background colour 
+  this->boxInfoContainer->clear(Color::Transparent);
+  this->window->clear(Color(121, 164, 113));  // Main background colour
   // render game objects
-  this->window->draw(this->boxInfo);
-  
+  this->boxInfoContainer->draw(this->boxInfo);
+  this->renderText(*this->boxInfoContainer);
+  window->draw(*sprite);
 
   // display flame
   this->window->display();
+  this->boxInfoContainer->display();
 }
 
 // Private Functions
@@ -98,15 +107,67 @@ void Game::initWin() {
   this->window = new RenderWindow(this->videoMode.getDesktopMode(), "Stock Sim",
                                   Style::Fullscreen);
   this->window->setFramerateLimit(60);
+
+  if (!this->openSans.loadFromFile("font/Opensans/OpenSans-Regular.ttf"))
+  {
+    std::cerr << "Failed to open OpenSans-Regular.ttf file." << std::endl;
+    this->window->close();
+  }
+
+  if (!this->pixeBoy.loadFromFile("font/Pixeboy/Pixeboy-z8XGD.ttf")) {
+    std::cerr << "Failed to open Pixeboy-z8XGD.ttf file." << std::endl;
+    this->window->close();
+  }
 }
 
 void Game::initBox() {
-  this->boxInfo.setSize(Vector2f(300.f,180.f));
+  // Text & font
+  this->boxInfoContainer = new RenderTexture();
+  this->boxInfoContainer->create(310,190);
+  for (int i = 0; i < INFOTEXT_LINE; i++) {
+    this->infoText[i].setFont(this->pixeBoy);
+    this->infoText[i].setFillColor(Color::Black);
+    this->infoText[i].setCharacterSize(32);
+    this->infoText[i].setString("NULL");
+    this->infoText[i].setPosition(Vector2f(20.f, 10.f + 32 * i));
+  }
+  this->sprite = new Sprite(this->boxInfoContainer->getTexture());
+  this->sprite->setPosition(Vector2f(35.f,35.f));
+
+  this->boxInfo.setSize(Vector2f(300.f, 180.f));
   this->boxInfo.setOutlineThickness(6);
   this->boxInfo.setFillColor(Color(108, 156, 99));
   this->boxInfo.setOutlineColor(Color(76, 107, 70));
-  this->boxInfo.setPosition(Vector2f(35.f,35.f));
+  this->boxInfo.setPosition(Vector2f(10.f, 10.f));
 }
+
+void Game::updateText(){
+  std::stringstream ss;
+
+  ss << "Name: " << player.getName();
+  this->infoText[0].setString(ss.str());
+  ss.str("");
+
+  ss << "Balance: $" << player.getBalance();
+  this->infoText[1].setString(ss.str());
+  ss.str("");
+
+  ss << "Margin: $" << player.getMargin();
+  this->infoText[2].setString(ss.str());
+  ss.str("");
+  
+  ss << std::setw(2) << std::setfill('0') << gametime.getDay() << "/" << std::setw(2) << std::setfill('0') << gametime.getMonth() << "/" << std::setw(2) << std::setfill('0') << gametime.getYear() /*<< "  " << std::setw(2) << std::setfill('0') << gametime.getHour() << ":" << std::setw(2) << std::setfill('0') << gametime.getMinute()*/ ;
+  this->infoText[3].setString(ss.str());
+  ss.str("");
+
+  this->infoText[4].setString("||   >   >>   >>>   >>>>");
+};
+void Game::renderText(RenderTarget &target) { 
+  for (int i = 0; i < INFOTEXT_LINE; i++)
+  {
+    target.draw(this->infoText[i]); 
+  }
+  }
 
 void Game::initAsset() {
   // stocks
@@ -126,7 +187,7 @@ void Game::initAsset() {
     this->numStocks++;
   }
 
-  stocks = new Asset*[this->numStocks];
+  stocks = new Asset *[this->numStocks];
 
   stock_file.clear();
   stock_file.seekg(0, std::ios::beg);
@@ -156,7 +217,7 @@ void Game::initAsset() {
     this->numCryptos++;
   }
 
-  cryptos = new Asset*[this->numCryptos];
+  cryptos = new Asset *[this->numCryptos];
   crypto_file.clear();
   crypto_file.seekg(0, std::ios::beg);
 
@@ -219,7 +280,7 @@ void Game::initEvents() {
     this->numEvents++;
   }
 
-  events = new Events*[this->numEvents];
+  events = new Events *[this->numEvents];
 
   event_file.clear();
   event_file.seekg(0, std::ios::beg);

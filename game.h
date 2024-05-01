@@ -2,6 +2,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#define INFOTEXT_LINE 5
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
@@ -18,6 +20,7 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+#include <iomanip> 
 
 using namespace sf;
 
@@ -26,9 +29,14 @@ class Game
 private:
     //Window
     RenderWindow *window = nullptr;
+    Sprite *sprite = nullptr;
     VideoMode videoMode;
     Event keyEvent;
+    RenderTexture *boxInfoContainer = nullptr;
     RectangleShape boxInfo; //Information Block (located top left)
+    Font openSans;
+    Font pixeBoy;
+    Text infoText[INFOTEXT_LINE];
 
     //Mouse position
     Vector2i mousePosWin;
@@ -53,6 +61,8 @@ private:
     //Functions
     void initWin();
     void initBox();
+    void updateText();
+    void renderText(RenderTarget&);
     void initAsset();
     void initEvents();
     
