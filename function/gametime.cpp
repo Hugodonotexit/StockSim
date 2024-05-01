@@ -1,12 +1,12 @@
 #include "gametime.h"
 
 Gametime::Gametime()
-    : timeScale(0), minute(0), hour(0), day(1), month(1), year(1939) {
+    : timeScaleIndex(0), minute(0), hour(0), day(1), month(1), year(1939) {
   this->elapsed = clock.restart();
 };
-Gametime::Gametime(int newTimeScale, int newMinute, int newHour, int newDay,
+Gametime::Gametime(int newtimeScaleIndex, int newMinute, int newHour, int newDay,
                    int newMonth, int newYear)
-    : timeScale(newTimeScale),
+    : timeScaleIndex(newtimeScaleIndex),
       minute(newMinute),
       hour(newHour),
       day(newDay),
@@ -14,18 +14,19 @@ Gametime::Gametime(int newTimeScale, int newMinute, int newHour, int newDay,
       year(newYear) {
   this->elapsed = clock.restart();
 };
-void Gametime::setTimeScale(int newTimeScale) {
-  this->timeScale = newTimeScale;
+void Gametime::setTimeScaleIndex(int newTimeScaleIndex) {
+  this->timeScaleIndex = newTimeScaleIndex;
 };
 void Gametime::updateTime() {
-  if (this->timeScale == 0) 
+
+  if (this->timeScale[this->timeScaleIndex] == 0) 
   {
     this->elapsed = clock.restart();
   }
   else
   {
     this->elapsed += clock.restart();
-    this->minute += elapsed.asSeconds() * timeScale;
+    this->minute += elapsed.asSeconds() * timeScale[this->timeScaleIndex];
     while (this->minute >= 60) {
       this->minute -= 60;
       this->hour++;

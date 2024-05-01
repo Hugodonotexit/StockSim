@@ -2,7 +2,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#define INFOTEXT_LINE 5
+#define INFOTEXT_LINE 4
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -37,9 +37,11 @@ private:
     Font openSans;
     Font pixeBoy;
     Text infoText[INFOTEXT_LINE];
-
+    Text timeChange[TIMECHANGE_MODE]
+;
     //Mouse position
     Vector2i mousePosWin;
+    Vector2f mousePosView;
 
     //Class
     Asset** cryptos = nullptr;
