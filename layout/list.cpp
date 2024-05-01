@@ -1,6 +1,6 @@
 #include "list.h"
 
-List::List(){}
+List::List() : currentView(ViewType::Stocks) {}
 
 void List::addCrypto(const Crypto& crypto) {
     cryptos.insert(crypto);

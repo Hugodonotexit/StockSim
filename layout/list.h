@@ -1,8 +1,8 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include "Crypto.h"
-#include "Stock.h"
+#include "crypto.h"
+#include "stock.h"
 #include <set>
 
 class List {
@@ -13,7 +13,7 @@ private:
     std::set<Stock> stocks;
     ViewType currentView;
 public:
-    List() : currentView(ViewType::Stocks) {} // list starts off in stocks
+    List(); // list starts off in stocks
     void addCrypto(const Crypto& crypto);
     void addStock(const Stock& stock);
     void switchView(); // if we have forex, will need to update

@@ -3,7 +3,7 @@
 #define FOREX_H
 #include "asset.h"
 #include "events.h"
-#include "../function/randomGen.h"
+#include "randomGen.h"
 #include <string>
 
 class Forex: public Asset
