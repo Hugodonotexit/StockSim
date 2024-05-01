@@ -1,8 +1,8 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include "crypto.h"
-#include "stock.h"
+#include "../asset/crypto.h"
+#include "../asset/stock.h"
 #include <set>
 
 class List {

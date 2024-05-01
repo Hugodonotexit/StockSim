@@ -2,7 +2,7 @@
 #define STOCK_H
 #include "asset.h"
 #include "events.h"
-#include "randomGen.h"
+#include "../function/randomGen.h"
 #include <string>
 
 class Stock: public Asset
