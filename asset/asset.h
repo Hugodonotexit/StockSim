@@ -1,7 +1,7 @@
 #ifndef ASSET_H
 #define ASSET_H
 #include <string>
-#include "randomGen.h"
+#include "../function/randomGen.h"
 
 class Asset
 {

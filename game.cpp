@@ -4,6 +4,7 @@ Game::Game() {
   this->initWin();
   this->initAsset();
   this->initEvents();
+  this->initBox();
 }
 Game::~Game() {
   delete this->window;
@@ -82,9 +83,11 @@ void Game::update() {
 }
 void Game::render() {
   // clear flame
-  this->window->clear(Color(121, 164, 113, 200));  // Main background colour 
+  this->window->clear(Color(121, 164, 113));  // Main background colour 
   // render game objects
+  this->window->draw(this->boxInfo);
   
+
   // display flame
   this->window->display();
 }
@@ -96,6 +99,15 @@ void Game::initWin() {
                                   Style::Fullscreen);
   this->window->setFramerateLimit(60);
 }
+
+void Game::initBox() {
+  this->boxInfo.setSize(Vector2f(300.f,180.f));
+  this->boxInfo.setOutlineThickness(6);
+  this->boxInfo.setFillColor(Color(108, 156, 99));
+  this->boxInfo.setOutlineColor(Color(76, 107, 70));
+  this->boxInfo.setPosition(Vector2f(35.f,35.f));
+}
+
 void Game::initAsset() {
   // stocks
   std::ifstream stock_file("db/stocks.txt");
