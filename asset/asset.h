@@ -21,13 +21,13 @@ public:
     };
     virtual void updatePrice() {
         /* randomGen rnd;
-        float changePercent = rnd.priceRandomGen(0, 3) / 100;
+        float changePercent = rnd.priceRandomGen(0, 3, 0) / 100;
         asset::setPrice(asset::getPrice() * (1 + changePercent)); 
         return changePercent;*/
     };
-    virtual void updatePrice(double mean, double stdDev) {
+    virtual void updatePrice(double mean, double stdDev, float skewness) {
         /* randomGen rnd;
-        float changePercent = rnd.priceRandomGen(mean, stdDev) / 100;
+        float changePercent = rnd.priceRandomGen(mean, stdDev, skewness) / 100;
         asset::setPrice(asset::getPrice() * (1 + changePercent)); 
         return changePercent;*/
     };

@@ -14,12 +14,12 @@ public:
         : Asset(newName, newTicker, newPrice), circulatingAmount(newCirculatingAmount) {};
     void updatePrice() {
         randomGen rnd;
-        float changePercent = rnd.priceRandomGen(-0.1, 3) / 100;
+        float changePercent = rnd.priceRandomGen(-0.1, 3, 0) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
-    void updatePrice(double mean, double stdDev) {
+    void updatePrice(double mean, double stdDev, float skewness) {
         randomGen rnd;
-        float changePercent = rnd.priceRandomGen(mean, stdDev) / 100;
+        float changePercent = rnd.priceRandomGen(mean, stdDev, skewness) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
 
