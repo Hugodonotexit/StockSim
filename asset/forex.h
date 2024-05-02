@@ -17,9 +17,9 @@ public:
         float changePercent = rnd.priceRandomGen(0, 0.3) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
-    void updatePrice(double mean, double stdDev) {
+    void updatePrice(double mean, double stdDev, float skweness) {
         randomGen rnd;
-        float changePercent = rnd.priceRandomGen(mean, stdDev) / 100;
+        float changePercent = rnd.priceRandomGen(mean, stdDev, skweness) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
 };

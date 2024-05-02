@@ -15,12 +15,12 @@ class Stock: public Asset
         : Asset(newName, newTicker, newPrice), sector(newSector), circulatingShares(newCirculatingShares) {};
     void updatePrice() {
         randomGen rnd;
-        float changePercent = rnd.priceRandomGen(0.25, 0.9) / 100;
+        float changePercent = rnd.priceRandomGen(0.25, 0.9, 0) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
-    void updatePrice(double mean, double stdDev) {
+    void updatePrice(float mean, float stdDev, float skewness) {
         randomGen rnd;
-        float changePercent = rnd.priceRandomGen(mean, stdDev) / 100;
+        float changePercent = rnd.priceRandomGen(mean, stdDev, skewness) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
     
