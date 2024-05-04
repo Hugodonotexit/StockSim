@@ -12,7 +12,7 @@ class Gametime
 private:
     Clock clock;
     Time elapsed;
-    int timeScale[TIMECHANGE_MODE] = {0,6,8,16,32};
+    int timeScale[TIMECHANGE_MODE] = {0,2880,8640,25920,92160};
     int timeScaleIndex = 0;
     int minute, hour, day, month, year;
     int dayOfMonth[12] = {31,28,31,30,31,30,31,31,30,31,30};
