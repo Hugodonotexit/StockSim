@@ -4,9 +4,10 @@
 int main() {
   // Init Game engine
   Game stockSim;
-
+  
   // Game loop
   while (stockSim.getWinIsOpen()) {
+    
     stockSim.update();
     stockSim.render();
   }
