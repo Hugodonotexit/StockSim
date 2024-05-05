@@ -16,11 +16,11 @@ void Graph::updateLines()
 {
     lines.clear();
     if (assetPrices.size() < 2) {return;}
-    float scale_y = this->graphHeight / (this->maxPriceRange - this->minPriceRange);
-    for (size_t i = 0; i < this->assetPrices.size(); i++)
+    float scale_y = GRAPH_HEIGHT / (this->maxPriceRange - this->minPriceRange);
+    for (size_t i = 0; i < this->assetPrices.size(); ++i)
     {
-        float x = i * (this->graphWidth / (this->assetPrices.size() - 1));
-        float y = graphHeight - (this->assetPrices[i] - this->minPriceRange) * scale_y;
+        float x = i * (GRAPH_WIDTH / (this->assetPrices.size() - 1));
+        float y = GRAPH_HEIGHT - (this->assetPrices[i] - this->minPriceRange) * scale_y;
         lines.append(sf::Vertex(sf::Vector2f(x, y), sf::Color::Green));
     }
 };

@@ -5,14 +5,15 @@
 #include <vector>
 #include <algorithm>
 
+#define GRAPH_POS_X 400
+#define GRAPH_POS_Y 300
+#define GRAPH_WIDTH 1400
+#define GRAPH_HEIGHT 700
 
 class Graph
 {
 private:
-    const int graphWidth = 1400;
-    const int graphHeight = 700;
-
-    std::vector<float> assetPrices = {100,200,300,400,05,900,70,800,89,710,90,80,70,60,50,44,13,52,11,11,11,11,11,11,11,11,50,1800,1500,1500};
+    std::vector<float> assetPrices = {500, 100, 200, 300, 500, 450, 660, 670, 200};
     float maxPriceRange, minPriceRange;
     sf::VertexArray lines;
 

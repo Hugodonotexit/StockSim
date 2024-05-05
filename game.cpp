@@ -97,8 +97,8 @@ void Game::update() {
 void Game::render() {
   // clear flame
   this->boxInfoContainer->clear(Color::Transparent);
-  this->graphContainer->clear(Color::Transparent);
-  this->window->clear(Color(121, 164, 113));  // Main background colour
+  this->graphContainer->clear(Color(76, 107, 70));
+  this->window->clear(Color(126, 169, 121));  // Main background colour
   // render game objects
   this->boxInfoContainer->draw(this->boxInfo);
   this->renderText(*this->boxInfoContainer);
@@ -168,10 +168,12 @@ void Game::initBox() {
   this->boxInfo.setOutlineColor(Color(76, 107, 70));
   this->boxInfo.setPosition(Vector2f(10.f, 10.f));
 
+  //Graph
+  this->cryptos[0]->setPrice(100);
   this->graphContainer = new RenderTexture();
-  this->graphContainer->create(1400, 700);
+  this->graphContainer->create(GRAPH_WIDTH, GRAPH_HEIGHT);
   this->sprite1 = new Sprite(this->graphContainer->getTexture());
-  this->sprite1->setPosition(Vector2f(400.f, 300.f));
+  this->sprite1->setPosition(Vector2f(GRAPH_POS_X , GRAPH_POS_Y));
 }
 
 void Game::updateText() {
