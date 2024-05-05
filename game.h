@@ -11,16 +11,17 @@
 #include <ctime>
 #include "asset/asset.h"
 #include "asset/crypto.h"
-//#include "asset/forex.h"
 #include "asset/stock.h"
 #include "asset/events.h"
 #include "function/gametime.h"
 #include "function/player.h"
+#include "function/graph.h"
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <iostream>
 #include <iomanip> 
+
 
 using namespace sf;
 
@@ -30,9 +31,11 @@ private:
     //Window
     RenderWindow *window = nullptr;
     Sprite *sprite = nullptr;
+    Sprite *sprite1 = nullptr;
     VideoMode videoMode;
     Event keyEvent;
     RenderTexture *boxInfoContainer = nullptr;
+    RenderTexture *graphContainer = nullptr;
     RectangleShape boxInfo; //Information Block (located top left)
     Font openSans;
     Font pixeBoy;
@@ -58,13 +61,13 @@ private:
     //int numForexs;
 
     //Objects
-    
 
     //Functions
     void initWin();
     void initBox();
     void updateText();
     void renderText(RenderTarget&);
+    void renderGraph(RenderTarget&);
     void initAsset();
     void initEvents();
     

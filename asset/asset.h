@@ -2,35 +2,25 @@
 #define ASSET_H
 #include <string>
 #include "../function/randomGen.h"
+#include "../function/graph.h"
 
-class Asset
+class Asset: public Graph
 {
 private:
     std::string name, ticker;
-    float oldPrice, price;
+    float price;
 public:
-    Asset(): name("NULL"), ticker("NULL"), price(-1) {};
-    Asset(std::string newName, std::string newTicker, float newPrice): name(newName), ticker(newTicker), price(newPrice) {};
+    Asset(): Graph(-1), name("NULL"), ticker("NULL"), price(-1) {};
+    Asset(std::string newName, std::string newTicker, float newPrice): Graph(newPrice), name(newName), ticker(newTicker), price(newPrice) {};
     float getPrice() const {return this->price;};
-    float getOldPrice() const {return this->oldPrice;};
     std::string getName() const {return this->name;};
     std::string getTicker() const {return this->ticker;};
     void setPrice(float newPrice) {
-        this->oldPrice = this->price;
         this->price = newPrice;
+        this->updatGraphPrice(this->price);
     };
-    virtual void updatePrice() {
-        /* randomGen rnd;
-        float changePercent = rnd.priceRandomGen(0, 3, 0) / 100;
-        asset::setPrice(asset::getPrice() * (1 + changePercent)); 
-        return changePercent;*/
-    };
-    virtual void updatePrice(double mean, double stdDev, float skewness) {
-        /* randomGen rnd;
-        float changePercent = rnd.priceRandomGen(mean, stdDev, skewness) / 100;
-        asset::setPrice(asset::getPrice() * (1 + changePercent)); 
-        return changePercent;*/
-    };
+    virtual void updatePrice() {};
+    virtual void updatePrice(double mean, double stdDev, float skewness) {};
     virtual ~Asset() {};
 };
 
