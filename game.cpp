@@ -9,16 +9,13 @@ Game::Game() {
 Game::~Game() {
   delete this->window;
   delete this->boxInfoContainer;
+  delete this->graphContainer;
   delete this->sprite;
+  delete this->sprite1;
   for (int i = 0; i < this->numCryptos; i++) {
     delete cryptos[i];
   }
-  /*
-  for (int i = 0; i < this->numForexs; i++)
-  {
-    delete forexs[i];
-  }
-  */
+
   for (int i = 0; i < this->numStocks; i++) {
     delete stocks[i];
   }
@@ -27,7 +24,6 @@ Game::~Game() {
   }
 
   delete[] this->cryptos;
-  // delete[] this->forexs;
   delete[] this->stocks;
   delete[] this->events;
 }
@@ -38,7 +34,6 @@ const bool Game::getWinIsOpen() { return this->window->isOpen(); }
 void Game::mousePosUpdate() {
   this->mousePosWin = Mouse::getPosition(*this->window);
   this->mousePosView = this->window->mapPixelToCoords(this->mousePosWin);
-
 }
 
 void Game::eventUpdate() {
@@ -102,15 +97,21 @@ void Game::update() {
 void Game::render() {
   // clear flame
   this->boxInfoContainer->clear(Color::Transparent);
+  this->graphContainer->clear(Color::Transparent);
   this->window->clear(Color(121, 164, 113));  // Main background colour
   // render game objects
   this->boxInfoContainer->draw(this->boxInfo);
   this->renderText(*this->boxInfoContainer);
+  this->graphContainer->draw(cryptos[0]->getLines());
+  this->renderGraph(*this->graphContainer);
   window->draw(*sprite);
+  window->draw(*sprite1);
 
   // display flame
-  this->window->display();
   this->boxInfoContainer->display();
+  this->graphContainer->display();
+  this->window->display();
+
 }
 
 // Private Functions
@@ -135,6 +136,7 @@ void Game::initBox() {
   // Text & font
   this->boxInfoContainer = new RenderTexture();
   this->boxInfoContainer->create(310, 190);
+  this->boxInfoContainer->setSmooth(true);
   for (int i = 0; i < INFOTEXT_LINE; i++) {
     this->infoText[i].setFont(this->pixeBoy);
     this->infoText[i].setFillColor(Color::Black);
@@ -148,8 +150,7 @@ void Game::initBox() {
     this->timeChange[i].setFillColor(Color::Black);
     this->timeChange[i].setCharacterSize(32);
     this->timeChange[i].setString("NULL");
-    this->timeChange[i].setPosition(
-        Vector2f(20.f + 40 * i + 6 * (i - 1) * (i - 1), 145.f));
+    this->timeChange[i].setPosition(Vector2f(20.f + 40 * i + 6 * (i - 1) * (i - 1), 145.f));
   }
 
   this->timeChange[0].setString("||");
@@ -166,6 +167,11 @@ void Game::initBox() {
   this->boxInfo.setFillColor(Color(108, 156, 99));
   this->boxInfo.setOutlineColor(Color(76, 107, 70));
   this->boxInfo.setPosition(Vector2f(10.f, 10.f));
+
+  this->graphContainer = new RenderTexture();
+  this->graphContainer->create(1400, 700);
+  this->sprite1 = new Sprite(this->graphContainer->getTexture());
+  this->sprite1->setPosition(Vector2f(400.f, 300.f));
 }
 
 void Game::updateText() {
@@ -201,6 +207,10 @@ void Game::renderText(RenderTarget &target) {
   for (int i = 0; i < TIMECHANGE_MODE; i++) {
     target.draw(this->timeChange[i]);
   }
+}
+
+void Game::renderGraph(RenderTarget &target) {
+  target.draw(cryptos[0]->getLines());
 }
 
 void Game::initAsset() {
@@ -263,38 +273,6 @@ void Game::initAsset() {
     iss >> name >> ticker >> price >> circulatingAmount;
     cryptos[i] = new Crypto(name, ticker, price, circulatingAmount);
   }
-
-  /*
-  //forex
-  std::ifstream forex_file("db/forexs.txt");
-  std::string forex_line;
-  this->numForexs = 0;
-
-  if (!forex_file) {
-    std::cerr << "Failed to open forexs file." << std::endl;
-    this->window->close();
-    return;
-  }
-
-  while (getline(forex_file, forex_line)) {
-    this->numForexs++;
-  }
-
-  forexs = new Asset*[this->numForexs];
-
-  forex_file.clear();
-  forex_file.seekg(0, std::ios::beg);
-
-  for (int i = 0; i < this->numForexs; i++)
-  {
-    getline(forex_file, forex_line);
-    std::istringstream iss(forex_line);
-    std::string name, ticker;
-    float price;
-    iss >> name >> ticker >> price;
-    forexs[i] = new Forex(name, ticker, price);
-  }
-  */
 };
 
 void Game::initEvents() {
