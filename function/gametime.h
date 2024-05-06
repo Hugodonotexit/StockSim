@@ -22,6 +22,7 @@ public:
     Gametime();
     Gametime(int, int, int, int, int, int);
     void setTimeScaleIndex(int);
+    int getTimeScaleIndex();
     void updateTime();
     ~Gametime();
     

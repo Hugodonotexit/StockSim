@@ -17,6 +17,7 @@ Gametime::Gametime(int newtimeScaleIndex, int newMinute, int newHour,
 void Gametime::setTimeScaleIndex(int newTimeScaleIndex) {
   this->timeScaleIndex = newTimeScaleIndex;
 };
+int Gametime::getTimeScaleIndex() {return this->timeScaleIndex;};
 void Gametime::updateTime() {
   Time frameTime = clock.restart();
   Time accumulatedTime = Time::Zero;

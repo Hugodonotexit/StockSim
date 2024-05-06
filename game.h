@@ -21,7 +21,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip> 
-
+#include <vector>
 
 using namespace sf;
 
@@ -36,7 +36,7 @@ private:
     Event keyEvent;
     RenderTexture *boxInfoContainer = nullptr;
     RenderTexture *graphContainer = nullptr;
-    RectangleShape boxInfo; //Information Block (located top left)
+    RectangleShape boxInfo, boxGraph;
     Font openSans;
     Font pixeBoy;
     Text infoText[INFOTEXT_LINE];
@@ -48,16 +48,17 @@ private:
 
     //Class
     Asset** cryptos = nullptr;
-    //Asset** forexs = nullptr;
     Asset** stocks = nullptr;
     Events** events = nullptr;
+    Asset* openedAsset;
     Gametime gametime;
     Player player;
 
     //Var
-    int numStocks;
-    int numCryptos;
-    int numEvents;
+    int numStocks, numCryptos, numEvents;
+    int timeScaleIndex = 1;
+    double dragOldPostion;
+    bool dragging;
     //int numForexs;
 
     //Objects

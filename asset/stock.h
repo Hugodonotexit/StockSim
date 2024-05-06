@@ -15,7 +15,7 @@ class Stock: public Asset
         : Asset(newName, newTicker, newPrice), sector(newSector), circulatingShares(newCirculatingShares) {};
     void updatePrice() {
         randomGen rnd;
-        float changePercent = rnd.priceRandomGen(0.25, 0.9, 0) / 100;
+        float changePercent = rnd.priceRandomGen(0.25, 0.9, 0.1) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
     void updatePrice(float mean, float stdDev, float skewness) {

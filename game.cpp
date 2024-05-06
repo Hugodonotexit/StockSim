@@ -1,5 +1,4 @@
 #include "game.h"
-
 Game::Game() {
   this->initWin();
   this->initAsset();
@@ -43,7 +42,48 @@ void Game::eventUpdate() {
       case Event::Closed:
         this->window->close();
         break;
+      case Event::MouseButtonPressed:
+        /*
+        Change time speed with mouse
+        Vector2f(35.f, 35.f) sprite offset
+        */
+        if (Mouse::isButtonPressed(Mouse::Left) &&
+            this->boxInfo.getGlobalBounds().contains(this->mousePosView -
+                                                     Vector2f(35.f, 35.f))) {
+          for (int i = 0; i < TIMECHANGE_MODE; i++) {
+            if (this->timeChange[i].getGlobalBounds().contains(
+                    this->mousePosView - Vector2f(35.f, 35.f))) {
+              this->timeScaleIndex = i;
+              this->gametime.setTimeScaleIndex(this->timeScaleIndex);
+            }
+          }
+        }
 
+        if (Mouse::isButtonPressed(Mouse::Left) &&
+            this->boxGraph.getGlobalBounds().contains(
+                this->mousePosView - Vector2f(GRAPH_POS_X, GRAPH_POS_Y))) {
+          this->dragging = true;
+          dragOldPostion = mousePosView.x;
+        }
+        break;
+      case Event::MouseButtonReleased:
+        if (Mouse::Left) {
+          this->dragging = false;
+        }
+        break;
+      case Event::MouseMoved:
+        if (this->dragging) {;
+        int move = (mousePosView.x - dragOldPostion) / 10;
+        cryptos[0]->setminmaxRange_x((int)(cryptos[0]->getminRange_x() - move), (int)(cryptos[0]->getmaxRange_x() - move));
+        }
+        break;
+      case Event::MouseWheelScrolled:
+        if (this->boxGraph.getGlobalBounds().contains(
+                this->mousePosView - Vector2f(GRAPH_POS_X, GRAPH_POS_Y))) {
+          cryptos[0]->setminRange_x((int)(cryptos[0]->getminRange_x() +
+                                          keyEvent.mouseWheelScroll.delta));
+        }
+        break;
       case Event::KeyPressed:
         switch (keyEvent.key.code) {
           case Keyboard::Escape:
@@ -54,16 +94,27 @@ void Game::eventUpdate() {
             this->gametime.setTimeScaleIndex(0);
             break;
           case Keyboard::Num1:
-            this->gametime.setTimeScaleIndex(1);
+            this->timeScaleIndex = 1;
+            this->gametime.setTimeScaleIndex(this->timeScaleIndex);
             break;
           case Keyboard::Num2:
-            this->gametime.setTimeScaleIndex(2);
+            this->timeScaleIndex = 2;
+            this->gametime.setTimeScaleIndex(this->timeScaleIndex);
             break;
           case Keyboard::Num3:
-            this->gametime.setTimeScaleIndex(3);
+            this->timeScaleIndex = 3;
+            this->gametime.setTimeScaleIndex(this->timeScaleIndex);
             break;
           case Keyboard::Num4:
-            this->gametime.setTimeScaleIndex(4);
+            this->timeScaleIndex = 4;
+            this->gametime.setTimeScaleIndex(this->timeScaleIndex);
+            break;
+          case Keyboard::Space:
+            if (gametime.getTimeScaleIndex() != 0) {
+              this->gametime.setTimeScaleIndex(0);
+            } else {
+              this->gametime.setTimeScaleIndex(this->timeScaleIndex);
+            }
             break;
           default:
             /*keep emptry*/
@@ -73,17 +124,6 @@ void Game::eventUpdate() {
       default:
         /*keep emptry*/
         break;
-    }
-  }
-  /*
-  Change time speed with mouse
-  Vector2f(35.f, 35.f) sprite offset
-  */
-  if (Mouse::isButtonPressed(Mouse::Left)) {
-    for (int i = 0; i < TIMECHANGE_MODE; i++) {
-      if (this->timeChange[i].getGlobalBounds().contains(this->mousePosView - Vector2f(35.f, 35.f))) {
-        this->gametime.setTimeScaleIndex(i);
-      }
     }
   }
 }
@@ -97,13 +137,18 @@ void Game::update() {
 void Game::render() {
   // clear flame
   this->boxInfoContainer->clear(Color::Transparent);
-  this->graphContainer->clear(Color(76, 107, 70));
+  this->graphContainer->clear(Color::Transparent);
   this->window->clear(Color(126, 169, 121));  // Main background colour
   // render game objects
+  // info
   this->boxInfoContainer->draw(this->boxInfo);
   this->renderText(*this->boxInfoContainer);
+  // graph
+  cryptos[0]->updateLines();
+  this->graphContainer->draw(this->boxGraph);
   this->graphContainer->draw(cryptos[0]->getLines());
   this->renderGraph(*this->graphContainer);
+
   window->draw(*sprite);
   window->draw(*sprite1);
 
@@ -111,7 +156,6 @@ void Game::render() {
   this->boxInfoContainer->display();
   this->graphContainer->display();
   this->window->display();
-
 }
 
 // Private Functions
@@ -150,7 +194,8 @@ void Game::initBox() {
     this->timeChange[i].setFillColor(Color::Black);
     this->timeChange[i].setCharacterSize(32);
     this->timeChange[i].setString("NULL");
-    this->timeChange[i].setPosition(Vector2f(20.f + 40 * i + 6 * (i - 1) * (i - 1), 145.f));
+    this->timeChange[i].setPosition(
+        Vector2f(20.f + 40 * i + 6 * (i - 1) * (i - 1), 145.f));
   }
 
   this->timeChange[0].setString("||");
@@ -168,12 +213,14 @@ void Game::initBox() {
   this->boxInfo.setOutlineColor(Color(76, 107, 70));
   this->boxInfo.setPosition(Vector2f(10.f, 10.f));
 
-  //Graph
+  // Graph
+  this->boxGraph.setSize(Vector2f(GRAPH_WIDTH, GRAPH_HEIGHT));
+  this->boxGraph.setFillColor(Color(76, 107, 70));
   this->cryptos[0]->setPrice(100);
   this->graphContainer = new RenderTexture();
   this->graphContainer->create(GRAPH_WIDTH, GRAPH_HEIGHT);
   this->sprite1 = new Sprite(this->graphContainer->getTexture());
-  this->sprite1->setPosition(Vector2f(GRAPH_POS_X , GRAPH_POS_Y));
+  this->sprite1->setPosition(Vector2f(GRAPH_POS_X, GRAPH_POS_Y));
 }
 
 void Game::updateText() {
@@ -200,6 +247,11 @@ void Game::updateText() {
       ;
   this->infoText[3].setString(ss.str());
   ss.str("");
+
+  for (int i = 0; i < TIMECHANGE_MODE; i++) {
+    this->timeChange[i].setFillColor(Color::Black);
+    this->timeChange[gametime.getTimeScaleIndex()].setFillColor(Color::White);
+  }
 };
 void Game::renderText(RenderTarget &target) {
   for (int i = 0; i < INFOTEXT_LINE; i++) {
