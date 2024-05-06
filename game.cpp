@@ -11,6 +11,7 @@ Game::~Game() {
   delete this->graphContainer;
   delete this->sprite;
   delete this->sprite1;
+  delete this->openedAsset;
   for (int i = 0; i < this->numCryptos; i++) {
     delete cryptos[i];
   }
@@ -72,16 +73,19 @@ void Game::eventUpdate() {
         }
         break;
       case Event::MouseMoved:
-        if (this->dragging) {;
-        int move = (mousePosView.x - dragOldPostion) / 10;
-        openedAsset->setminmaxRange_x((int)(openedAsset->getminRange_x() - move), (int)(openedAsset->getmaxRange_x() - move));
+        if (this->dragging) {
+          ;
+          int move = (mousePosView.x - dragOldPostion) / 10;
+          this->openedAsset->setminmaxRange_x(
+              (int)(this->openedAsset->getminRange_x() - move),
+              (int)(this->openedAsset->getmaxRange_x() - move));
         }
         break;
       case Event::MouseWheelScrolled:
         if (this->boxGraph.getGlobalBounds().contains(
                 this->mousePosView - Vector2f(GRAPH_POS_X, GRAPH_POS_Y))) {
-          openedAsset->setminRange_x((int)(openedAsset->getminRange_x() +
-                                          keyEvent.mouseWheelScroll.delta));
+                this->openedAsset->setminRange_x((int)(this->openedAsset->getminRange_x() +
+                                                  keyEvent.mouseWheelScroll.delta));
         }
         break;
       case Event::KeyPressed:
@@ -133,6 +137,7 @@ void Game::update() {
   this->gametime.updateTime();
   this->player.updateMargin();
   this->updateText();
+  this->updateAsset(nullptr);
 }
 void Game::render() {
   // clear flame
@@ -144,9 +149,9 @@ void Game::render() {
   this->boxInfoContainer->draw(this->boxInfo);
   this->renderText(*this->boxInfoContainer);
   // graph
-  openedAsset->updateLines();
+  this->openedAsset->updateLines();
   this->graphContainer->draw(this->boxGraph);
-  this->graphContainer->draw(openedAsset->getLines());
+  this->graphContainer->draw(this->openedAsset->getLines());
   this->renderGraph(*this->graphContainer);
 
   window->draw(*sprite);
@@ -216,11 +221,27 @@ void Game::initBox() {
   // Graph
   this->boxGraph.setSize(Vector2f(GRAPH_WIDTH, GRAPH_HEIGHT));
   this->boxGraph.setFillColor(Color(76, 107, 70));
-  this->openedAsset->setPrice(100);
   this->graphContainer = new RenderTexture();
   this->graphContainer->create(GRAPH_WIDTH, GRAPH_HEIGHT);
   this->sprite1 = new Sprite(this->graphContainer->getTexture());
   this->sprite1->setPosition(Vector2f(GRAPH_POS_X, GRAPH_POS_Y));
+}
+
+void Game::updateAsset(Asset *excludedAsset = nullptr) {
+  if (this->gametime.getHour() != this->oldTime) {
+    for (int i = 0; i < this->numStocks; i++) {
+      if (excludedAsset != this->stocks[i]) {
+        this->stocks[i]->updatePrice();
+      }
+    }
+    for (int i = 0; i < this->numCryptos; i++) {
+      if (excludedAsset != this->cryptos[i]) {
+        this->cryptos[i]->updatePrice();
+      }
+    }
+  }
+  std::this_thread::sleep_for(std::chrono::microseconds(10));
+  this->oldTime = this->gametime.getHour();
 }
 
 void Game::updateText() {
@@ -264,7 +285,7 @@ void Game::renderText(RenderTarget &target) {
 }
 
 void Game::renderGraph(RenderTarget &target) {
-  target.draw(openedAsset->getLines());
+  target.draw(this->openedAsset->getLines());
 }
 
 void Game::initAsset() {
@@ -327,6 +348,8 @@ void Game::initAsset() {
     iss >> name >> ticker >> price >> circulatingAmount;
     cryptos[i] = new Crypto(name, ticker, price, circulatingAmount);
   }
+
+  this->openedAsset = cryptos[0];
 };
 
 void Game::initEvents() {

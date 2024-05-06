@@ -22,6 +22,7 @@
 #include <iostream>
 #include <iomanip> 
 #include <vector>
+#include <thread>
 
 using namespace sf;
 
@@ -40,7 +41,7 @@ private:
     Font openSans;
     Font pixeBoy;
     Text infoText[INFOTEXT_LINE];
-    Text timeChange[TIMECHANGE_MODE]
+    Text timeChange[TIMECHANGE_MODE];
 ;
     //Mouse position
     Vector2i mousePosWin;
@@ -57,6 +58,7 @@ private:
     //Var
     int numStocks, numCryptos, numEvents;
     int timeScaleIndex = 1;
+    int oldTime = 0;
     double dragOldPostion;
     bool dragging;
     //int numForexs;
@@ -66,6 +68,7 @@ private:
     //Functions
     void initWin();
     void initBox();
+    void updateAsset(Asset*);
     void updateText();
     void renderText(RenderTarget&);
     void renderGraph(RenderTarget&);
