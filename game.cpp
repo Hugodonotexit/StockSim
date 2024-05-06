@@ -74,13 +74,13 @@ void Game::eventUpdate() {
       case Event::MouseMoved:
         if (this->dragging) {;
         int move = (mousePosView.x - dragOldPostion) / 10;
-        cryptos[0]->setminmaxRange_x((int)(cryptos[0]->getminRange_x() - move), (int)(cryptos[0]->getmaxRange_x() - move));
+        openedAsset->setminmaxRange_x((int)(openedAsset->getminRange_x() - move), (int)(openedAsset->getmaxRange_x() - move));
         }
         break;
       case Event::MouseWheelScrolled:
         if (this->boxGraph.getGlobalBounds().contains(
                 this->mousePosView - Vector2f(GRAPH_POS_X, GRAPH_POS_Y))) {
-          cryptos[0]->setminRange_x((int)(cryptos[0]->getminRange_x() +
+          openedAsset->setminRange_x((int)(openedAsset->getminRange_x() +
                                           keyEvent.mouseWheelScroll.delta));
         }
         break;
@@ -144,9 +144,9 @@ void Game::render() {
   this->boxInfoContainer->draw(this->boxInfo);
   this->renderText(*this->boxInfoContainer);
   // graph
-  cryptos[0]->updateLines();
+  openedAsset->updateLines();
   this->graphContainer->draw(this->boxGraph);
-  this->graphContainer->draw(cryptos[0]->getLines());
+  this->graphContainer->draw(openedAsset->getLines());
   this->renderGraph(*this->graphContainer);
 
   window->draw(*sprite);
@@ -216,7 +216,7 @@ void Game::initBox() {
   // Graph
   this->boxGraph.setSize(Vector2f(GRAPH_WIDTH, GRAPH_HEIGHT));
   this->boxGraph.setFillColor(Color(76, 107, 70));
-  this->cryptos[0]->setPrice(100);
+  this->openedAsset->setPrice(100);
   this->graphContainer = new RenderTexture();
   this->graphContainer->create(GRAPH_WIDTH, GRAPH_HEIGHT);
   this->sprite1 = new Sprite(this->graphContainer->getTexture());
@@ -264,7 +264,7 @@ void Game::renderText(RenderTarget &target) {
 }
 
 void Game::renderGraph(RenderTarget &target) {
-  target.draw(cryptos[0]->getLines());
+  target.draw(openedAsset->getLines());
 }
 
 void Game::initAsset() {

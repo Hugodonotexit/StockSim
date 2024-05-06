@@ -50,7 +50,7 @@ private:
     Asset** cryptos = nullptr;
     Asset** stocks = nullptr;
     Events** events = nullptr;
-    Asset* openedAsset;
+    Asset* openedAsset = nullptr;
     Gametime gametime;
     Player player;
 
