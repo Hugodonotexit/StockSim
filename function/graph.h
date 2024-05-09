@@ -13,7 +13,7 @@
 class Graph
 {
 private:
-    std::vector<float> assetPrices;
+    std::vector<float> assetPrices = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     double maxPriceRange, minPriceRange, priceRange, scale_y;
     int maxRange_x = this->assetPrices.size();
     int minRange_x = 0;

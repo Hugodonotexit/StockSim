@@ -15,12 +15,11 @@ void Graph::calculatePriceRange()
 void Graph::updateLines()
 {
     lines.clear();
-    if (assetPrices.size() < 2) {return;}
     scale_y = (GRAPH_HEIGHT - 30 ) / this->priceRange;
     for (int i = this->minRange_x; i < this->maxRange_x; i++)
     {
-        float x = (i - minRange_x) * (GRAPH_WIDTH / (maxRange_x - minRange_x - 1));
-        float y = GRAPH_HEIGHT - (this->assetPrices[i] - this->minPriceRange) * scale_y - 15;
+        float x = (i - minRange_x) * (GRAPH_WIDTH / (maxRange_x - minRange_x));
+        float y = GRAPH_HEIGHT - (this->assetPrices[i] - this->minPriceRange) * scale_y - 20;
         lines.append(sf::Vertex(sf::Vector2f(x, y), sf::Color::Green));
     }
 };
@@ -33,7 +32,7 @@ void Graph::updatGraphPrice(float price)
 };
 
 void Graph::setminRange_x(int min){
-    if (min < 0 || min > this->maxRange_x - 5)
+    if (min < 0 || min > this->maxRange_x - 14)
     {
         return;
     }
@@ -41,7 +40,7 @@ void Graph::setminRange_x(int min){
 }
 
 void Graph::setmaxRange_x(int max){
-    if (max > (int)this->assetPrices.size() || max < (int)this->minRange_x + 5)
+    if (max > (int)this->assetPrices.size() || max < (int)this->minRange_x + 14)
     {
         return;
     }
@@ -49,7 +48,7 @@ void Graph::setmaxRange_x(int max){
 }
 
 void Graph::setminmaxRange_x(int min, int max){
-    if (min < 0 || min > this->maxRange_x - 5 || max > (int)this->assetPrices.size() || max < (int)this->minRange_x + 5)
+    if (min < 0 || min > this->maxRange_x - 14 || max > (int)this->assetPrices.size() || max < (int)this->minRange_x + 14)
     {
         return;
     }

@@ -73,9 +73,8 @@ void Game::eventUpdate() {
         }
         break;
       case Event::MouseMoved:
-        if (this->dragging) {
-          ;
-          int move = (mousePosView.x - dragOldPostion) / 10;
+        if (this->dragging && this->gametime.getTimeScaleIndex() == 0) {
+          int move = (mousePosView.x - dragOldPostion);
           this->openedAsset->setminmaxRange_x(
               (int)(this->openedAsset->getminRange_x() - move),
               (int)(this->openedAsset->getmaxRange_x() - move));
@@ -94,7 +93,6 @@ void Game::eventUpdate() {
             this->window->close();
             break;
           case Keyboard::Num0:
-          case Keyboard::P:
             this->gametime.setTimeScaleIndex(0);
             break;
           case Keyboard::Num1:
@@ -114,6 +112,7 @@ void Game::eventUpdate() {
             this->gametime.setTimeScaleIndex(this->timeScaleIndex);
             break;
           case Keyboard::Space:
+          case Keyboard::P:
             if (gametime.getTimeScaleIndex() != 0) {
               this->gametime.setTimeScaleIndex(0);
             } else {
@@ -228,7 +227,7 @@ void Game::initBox() {
 }
 
 void Game::updateAsset(Asset *excludedAsset = nullptr) {
-  if (this->gametime.getHour() != this->oldTime) {
+  if (this->gametime.getDay() != this->oldTime) {
     for (int i = 0; i < this->numStocks; i++) {
       if (excludedAsset != this->stocks[i]) {
         this->stocks[i]->updatePrice();
@@ -239,9 +238,10 @@ void Game::updateAsset(Asset *excludedAsset = nullptr) {
         this->cryptos[i]->updatePrice();
       }
     }
+    this->openedAsset->setminmaxRange_x(this->openedAsset->getminRange_x() + 1, this->openedAsset->getmaxRange_x() + 1);
   }
-  std::this_thread::sleep_for(std::chrono::microseconds(10));
-  this->oldTime = this->gametime.getHour();
+  std::this_thread::sleep_for(std::chrono::microseconds(1));
+  this->oldTime = this->gametime.getDay();
 }
 
 void Game::updateText() {
