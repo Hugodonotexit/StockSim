@@ -143,6 +143,7 @@ void Game::render() {
   this->boxInfoContainer->clear(Color::Transparent);
   this->graphContainer->clear(Color::Transparent);
   this->window->clear(Color(126, 169, 121));  // Main background colour
+  this->window->setView(this->view);
   // render game objects
   // info
   this->boxInfoContainer->draw(this->boxInfo);
@@ -168,6 +169,8 @@ void Game::initWin() {
   this->window = new RenderWindow(this->videoMode.getDesktopMode(), "Stock Sim",
                                   Style::Fullscreen);
   this->window->setFramerateLimit(60);
+  this->view.setSize(this->keyEvent.size.width, this->keyEvent.size.height);
+  this->view.setCenter(this->keyEvent.size.width / 2.f, this->keyEvent.size.height / 2.f);
 
   if (!this->openSans.loadFromFile("font/Opensans/OpenSans-Regular.ttf")) {
     std::cerr << "Failed to open OpenSans-Regular.ttf file." << std::endl;

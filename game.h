@@ -42,6 +42,8 @@ private:
     Font pixeBoy;
     Text infoText[INFOTEXT_LINE];
     Text timeChange[TIMECHANGE_MODE];
+    View view;
+
 ;
     //Mouse position
     Vector2i mousePosWin;
