@@ -19,6 +19,11 @@ Game::~Game() {
   for (int i = 0; i < this->numStocks; i++) {
     delete stocks[i];
   }
+  for (int i = 0; i < this->numCryptolizedStock; i++)
+  {
+    delete cryptolizedStock[i];
+  }
+  
   for (int i = 0; i < this->numEvents; i++) {
     delete events[i];
   }
@@ -26,6 +31,7 @@ Game::~Game() {
   delete[] this->cryptos;
   delete[] this->stocks;
   delete[] this->events;
+  delete[] this->cryptolizedStock;
 }
 
 // Public Functions
@@ -75,15 +81,15 @@ void Game::eventUpdate() {
       case Event::MouseMoved:
         if (this->dragging && this->gametime.getTimeScaleIndex() == 0) {
           int move = (mousePosView.x - dragOldPostion);
-          this->openedAsset->setminmaxRange_x(
-              (int)(this->openedAsset->getminRange_x() - move),
-              (int)(this->openedAsset->getmaxRange_x() - move));
+          this->openedAsset->setGraph()->setminmaxRange_x(
+              (int)(this->openedAsset->setGraph()->getminRange_x() - move),
+              (int)(this->openedAsset->setGraph()->getmaxRange_x() - move));
         }
         break;
       case Event::MouseWheelScrolled:
         if (this->boxGraph.getGlobalBounds().contains(
                 this->mousePosView - Vector2f(GRAPH_POS_X, GRAPH_POS_Y))) {
-                this->openedAsset->setminRange_x((int)(this->openedAsset->getminRange_x() +
+                this->openedAsset->setGraph()->setminRange_x((int)(this->openedAsset->setGraph()->getminRange_x() +
                                                   keyEvent.mouseWheelScroll.delta));
         }
         break;
@@ -134,7 +140,6 @@ void Game::update() {
   this->eventUpdate();
   this->mousePosUpdate();
   this->gametime.updateTime();
-  this->player.updateMargin();
   this->updateText();
   this->updateAsset(nullptr);
 }
@@ -143,15 +148,14 @@ void Game::render() {
   this->boxInfoContainer->clear(Color::Transparent);
   this->graphContainer->clear(Color::Transparent);
   this->window->clear(Color(126, 169, 121));  // Main background colour
-  this->window->setView(this->view);
   // render game objects
   // info
   this->boxInfoContainer->draw(this->boxInfo);
   this->renderText(*this->boxInfoContainer);
   // graph
-  this->openedAsset->updateLines();
+  this->openedAsset->setGraph()->updateLines();
   this->graphContainer->draw(this->boxGraph);
-  this->graphContainer->draw(this->openedAsset->getLines());
+  this->graphContainer->draw(this->openedAsset->setGraph()->getLines());
   this->renderGraph(*this->graphContainer);
 
   window->draw(*sprite);
@@ -166,11 +170,11 @@ void Game::render() {
 // Private Functions
 
 void Game::initWin() {
-  this->window = new RenderWindow(this->videoMode.getDesktopMode(), "Stock Sim",
-                                  Style::Fullscreen);
+  this->videoMode.width = 1920;
+  this->videoMode.height = 1080;
+  this->window = new RenderWindow(this->videoMode, "Stock Sim");
+  this->window->setPosition(Vector2i(0,0));
   this->window->setFramerateLimit(60);
-  this->view.setSize(this->keyEvent.size.width, this->keyEvent.size.height);
-  this->view.setCenter(this->keyEvent.size.width / 2.f, this->keyEvent.size.height / 2.f);
 
   if (!this->openSans.loadFromFile("font/Opensans/OpenSans-Regular.ttf")) {
     std::cerr << "Failed to open OpenSans-Regular.ttf file." << std::endl;
@@ -241,9 +245,14 @@ void Game::updateAsset(Asset *excludedAsset = nullptr) {
         this->cryptos[i]->updatePrice();
       }
     }
-    this->openedAsset->setminmaxRange_x(this->openedAsset->getminRange_x() + 1, this->openedAsset->getmaxRange_x() + 1);
+    for (int i = 0; i < this->numCryptolizedStock; i++) {
+      if (excludedAsset != this->cryptolizedStock[i]) {
+        this->cryptolizedStock[i]->updatePrice();
+      }
+    }
+    this->openedAsset->setGraph()->setminmaxRange_x(this->openedAsset->setGraph()->getminRange_x() + 1, this->openedAsset->setGraph()->getmaxRange_x() + 1);
   }
-  std::this_thread::sleep_for(std::chrono::microseconds(1));
+  std::this_thread::sleep_for(std::chrono::nanoseconds(500));
   this->oldTime = this->gametime.getDay();
 }
 
@@ -258,18 +267,11 @@ void Game::updateText() {
   this->infoText[1].setString(ss.str());
   ss.str("");
 
-  ss << "Margin: $" << player.getMargin();
-  this->infoText[2].setString(ss.str());
-  ss.str("");
-
   ss << std::setw(2) << std::setfill('0') << gametime.getDay() << "/"
      << std::setw(2) << std::setfill('0') << gametime.getMonth() << "/"
      << std::setw(2) << std::setfill('0')
-     << gametime.getYear() /*<< "  " << std::setw(2) << std::setfill('0') <<
-                              gametime.getHour() << ":" << std::setw(2) <<
-                              std::setfill('0') << gametime.getMinute()*/
-      ;
-  this->infoText[3].setString(ss.str());
+     << gametime.getYear();
+  this->infoText[2].setString(ss.str());
   ss.str("");
 
   for (int i = 0; i < TIMECHANGE_MODE; i++) {
@@ -288,7 +290,7 @@ void Game::renderText(RenderTarget &target) {
 }
 
 void Game::renderGraph(RenderTarget &target) {
-  target.draw(this->openedAsset->getLines());
+  target.draw(this->openedAsset->setGraph()->getLines());
 }
 
 void Game::initAsset() {
@@ -350,6 +352,17 @@ void Game::initAsset() {
     float price;
     iss >> name >> ticker >> price >> circulatingAmount;
     cryptos[i] = new Crypto(name, ticker, price, circulatingAmount);
+  }
+
+  //cryptolizedStock
+  srand(rand());
+  this->numCryptolizedStock = (rand() % 2 + 2);
+
+  this->cryptolizedStock = new Asset *[this->numCryptolizedStock];
+
+  for (int i = 0; i < this->numCryptolizedStock; i++)
+  {
+    this->cryptolizedStock[i] = new CryptolizedStock(static_cast<Stock*>(stocks[rand() % 10]));
   }
 
   this->openedAsset = cryptos[0];

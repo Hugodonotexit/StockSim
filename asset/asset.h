@@ -4,24 +4,31 @@
 #include "../function/randomGen.h"
 #include "../function/graph.h"
 
-class Asset: public Graph
+
+
+class Asset
 {
 private:
     std::string name, ticker;
     float price;
+    Graph *graph = nullptr;
 public:
-    Asset(): Graph(-1), name("NULL"), ticker("NULL"), price(-1) {};
-    Asset(std::string newName, std::string newTicker, float newPrice): Graph(newPrice), name(newName), ticker(newTicker), price(newPrice) {};
+    Asset(): name("NULL"), ticker("NULL"), price(-1) { this->graph = new Graph(-1);};
+    Asset(std::string newName, std::string newTicker, float newPrice): name(newName), ticker(newTicker), price(newPrice) { this->graph = new Graph(newPrice);};
+    Graph *setGraph() {return this->graph;};
     float getPrice() const {return this->price;};
     std::string getName() const {return this->name;};
     std::string getTicker() const {return this->ticker;};
     void setPrice(float newPrice) {
         this->price = newPrice;
-        this->updatGraphPrice(this->price);
+        this->setGraph()->updatGraphPrice(this->price);
+    };
+    void setTicker(std::string newTicker) {
+        this->ticker = newTicker;
     };
     virtual void updatePrice() {};
     virtual void updatePrice(double mean, double stdDev, float skewness) {};
-    virtual ~Asset() {};
+    virtual ~Asset() {delete this->graph;};
 };
 
 #endif

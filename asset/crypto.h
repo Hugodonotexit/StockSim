@@ -8,25 +8,23 @@
 class Crypto: public Asset
 {
 private:
-    unsigned long long circulatingAmount;
+    unsigned long circulatingAmount;
+    randomGen rnd;
 public:
     Crypto(std::string newName, std::string newTicker, float newPrice, unsigned long long newCirculatingAmount)
         : Asset(newName, newTicker, newPrice), circulatingAmount(newCirculatingAmount) {};
     void updatePrice() {
-        randomGen rnd;
-        float changePercent = rnd.priceRandomGen(-0.1, 3, 0.1) / 100;
+        float changePercent = this->rnd.priceRandomGen(-0.1, 3, 0.1) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
     void updatePrice(double mean, double stdDev, float skewness) {
-        randomGen rnd;
-        float changePercent = rnd.priceRandomGen(mean, stdDev, skewness) / 100;
+        float changePercent = this->rnd.priceRandomGen(mean, stdDev, skewness) / 100;
         Asset::setPrice(Asset::getPrice() * (1 + changePercent));
     };
+    unsigned long getCirculatingAmount(){
+        return this->circulatingAmount;
+    };
 
-    // used for sorting the set of cryptos such that the lists tickers are in alphabetical order
-    bool operator<(const Crypto& other) const {
-        return this->getTicker() < other.getTicker(); 
-    }
 };
 
 #endif

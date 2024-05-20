@@ -7,7 +7,7 @@ class Player
 private:
     std::string name;
     int rank;
-    float balance, assetValue, margin;
+    float balance, assetValue;
 public:
     Player();
     Player(std::string, float);
@@ -19,8 +19,6 @@ public:
     float getRank() const;
     float getBalance() const;
     float getAssetValue() const;
-    float getMargin() const;
-    void updateMargin();
     ~Player();
 };
 
