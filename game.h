@@ -43,7 +43,7 @@ private:
     RenderTexture *boxInfoContainer = nullptr;
     RenderTexture *graphContainer = nullptr;
     RenderTexture *listContainer = nullptr;
-    RectangleShape boxInfo, boxGraph, boxAssetInfo, boxListTab[3];
+    RectangleShape boxInfo, boxGraph, boxAssetInfo, boxList,boxListTab[3];
     Font openSans;
     Font pixeBoy;
     Text infoText[INFOTEXT_LINE];

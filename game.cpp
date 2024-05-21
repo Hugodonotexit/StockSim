@@ -81,6 +81,28 @@ void Game::eventUpdate() {
           this->dragging = true;
           dragOldPostion = mousePosView.x;
         }
+
+        if (Mouse::isButtonPressed(Mouse::Left) && this->boxList.getGlobalBounds().contains(this->mousePosView - Vector2f(35, 300)))
+        {
+          for (int i = 0; i < TAB_NUM; i++)
+          {
+            if (this->boxListTab[i].getGlobalBounds().contains(this->mousePosView - Vector2f(35, 300)))
+            {
+              this->listIndex = i;
+            }
+          }
+          
+          for (int i = 0; i < this->list[this->listIndex]->getIndex(); i++)
+          { 
+            if (this->list[this->listIndex]->getListItem(i)->getText()->getGlobalBounds().contains(
+                    this->mousePosView - Vector2f(35, 300)))
+            {
+              /* code */
+            }    
+          }
+          
+        }
+        
         break;
       case Event::MouseButtonReleased:
         if (Mouse::Left) {
@@ -157,7 +179,7 @@ void Game::render() {
   // clear flame
   this->boxInfoContainer->clear(Color::Transparent);
   this->graphContainer->clear(Color::Transparent);
-  this->listContainer->clear(Color(108, 156, 99));
+  this->listContainer->clear(Color::Transparent);
   this->window->clear(Color(126, 169, 121));  // Main background colour
   // render game objects
   // info
@@ -170,6 +192,7 @@ void Game::render() {
   this->renderGraph(*this->graphContainer);
 
   // list
+  this->listContainer->draw(this->boxList);
   for (int i = 0; i < TAB_NUM; i++)
   {
     this->listContainer->draw(this->boxListTab[i]);
@@ -265,7 +288,8 @@ void Game::initBox() {
         this->boxListTab[i].setFillColor(Color(76, 107, 70));
         this->boxListTab[i].setOutlineColor(Color(3, 146, 27));
     }
-    
+    this->boxList.setSize(Vector2f(310,700));
+    this->boxList.setFillColor(Color(108, 156, 99));
     this->listContainer = new RenderTexture();
     this->listContainer->create(310,700);
     this->listContainer->setSmooth(true);
@@ -302,7 +326,7 @@ void Game::updateListItemText() {
   for (int i = 0; i < this->list[this->listIndex]->getIndex(); i++)
   {
     this->list[this->listIndex]->getListItem(i)->updateText();
-    this->list[this->listIndex]->getListItem(i)->getText().setPosition(Vector2f(5.f, 16.f * i + 16));
+    this->list[this->listIndex]->getListItem(i)->getText()->setPosition(Vector2f(5.f, 30.f * i + 35));
   }
 }
 
@@ -370,7 +394,7 @@ void Game::renderTabText(RenderTarget &target) {
 
 void Game::renderListItemText(RenderTarget &target) {
   for (int i = 0; i < this->list[this->listIndex]->getIndex(); i++) {
-    target.draw(this->list[this->listIndex]->getListItem(i)->getText());
+    target.draw(*this->list[this->listIndex]->getListItem(i)->getText());
   }
 }
 
@@ -458,7 +482,7 @@ void Game::initAsset() {
 
   for (int i = 0; i < this->numCryptolizedStock; i++)
   {
-    this->cryptolizedStock[i] = new CryptolizedStock(static_cast<Stock*>(stocks[rand() % this->numStocks]));
+    this->cryptolizedStock[i] = new CryptolizedStock(*dynamic_cast<Stock*>(stocks[rand() % this->numStocks]));
   }
 
   this->openedAsset = cryptos[0];

@@ -4,6 +4,7 @@
 #include "stock.h"
 #include <sstream>
 #include <string>
+#include <iostream>
 class CryptolizedStock : public Crypto
 {
 private:
@@ -11,17 +12,17 @@ private:
     Stock *peggedStock;
     randomGen rnd;
 public:
-    CryptolizedStock(Stock *stock) : Crypto(stock->getName(), "NULL", 0, rand() % 10000000 + 10000){
-        peggedStock = stock;
+    CryptolizedStock(Stock &stock) : Crypto(stock.getName(), "NULL", 10, rand() % 10000000 + 10000){
+        peggedStock = &stock;
         std::stringstream ss;
         ss << "X" << peggedStock->getTicker();
         this->setTicker(ss.str());
-        this->shareOwned = stock->getCirculatingShares() / 100 + this->rnd.priceRandomGen(100000,1000,0.25);
-        double newPirce = this->shareOwned / this->getCirculatingAmount() * peggedStock->getPrice();
+        this->shareOwned = peggedStock->getCirculatingShares() / 100 + this->rnd.priceRandomGen(100000,1000,0.25);
+        double newPirce = ((float)this->shareOwned / (float)this->getCirculatingAmount()) * peggedStock->getPrice();
         this->setPrice(newPirce);
     }
     void updatePrice() {
-        double newPirce = this->shareOwned / this->getCirculatingAmount() * peggedStock->getPrice();
+        double newPirce = ((float)this->shareOwned / (float)this->getCirculatingAmount()) * peggedStock->getPrice();
         this->setPrice(newPirce);
     }
     ~CryptolizedStock() {};
