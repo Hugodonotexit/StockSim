@@ -1,5 +1,5 @@
 GlobalEconomicBoom, Global economic boom boosts confidence in markets, 7.5, 1.2
-GlobalRecession, Global recession causes decline in markets, -6, 1.5
+GlobalRecession, Global recession causes decline in markets, -8, 1.5
 InterestRateHike, Interest rate hike dampens investment, -3, 0.5
 InterestRateCut, Interest rate cut boosts investment, 4, 0.8
 TechInnovation, Breakthrough technology innovation enhances market position, 9, 2.0

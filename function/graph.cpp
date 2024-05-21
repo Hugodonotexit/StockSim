@@ -14,6 +14,7 @@ void Graph::calculatePriceRange()
 
 void Graph::updateLines()
 {
+    this->calculatePriceRange();
     lines.clear();
     scale_y = (GRAPH_HEIGHT - 30 ) / this->priceRange;
     for (int i = this->minRange_x; i < this->maxRange_x; i++)
@@ -25,11 +26,21 @@ void Graph::updateLines()
 };
 
 void Graph::updatGraphPrice(float price)
-{
+{   
+    this->maxRange_x = this->assetPrices.size();
+    this->minRange_x = maxRange_x - 365;
+    if (this->minRange_x < 0)
+    {
+        this->minRange_x = 0;
+    }
+    
     this->assetPrices.push_back(price);
-    this->calculatePriceRange();
-    this->updateLines();
 };
+
+void Graph::switchGraph() {
+
+    this->updateLines();
+}
 
 void Graph::setminRange_x(int min){
     if (min < 0 || min > this->maxRange_x - 14)

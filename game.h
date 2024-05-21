@@ -38,6 +38,7 @@ private:
     Sprite *sprite = nullptr;
     Sprite *sprite1 = nullptr;
     Sprite *sprite2 = nullptr;
+    Sprite *sprite3 = nullptr;
     VideoMode videoMode;
     Event keyEvent;
     RenderTexture *boxInfoContainer = nullptr;
@@ -50,6 +51,7 @@ private:
     RectangleShape ButtonBuy, ButtonSell, ButtonAdd, ButtonMinus;
     Font openSans;
     Font pixeBoy;
+    Text EvenText;
     Text infoText[INFOTEXT_LINE];
     Text timeChange[TIMECHANGE_MODE];
     Text typeTab[TAB_NUM]; 
@@ -90,6 +92,7 @@ private:
     void renderTabText(RenderTarget&);
     void renderListItemText(RenderTarget&);
     void renderGraph(RenderTarget&);
+    void renderEventText(RenderTarget&);
     void initAsset();
     void initEvents();
     void initList();

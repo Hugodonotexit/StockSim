@@ -20,4 +20,3 @@ Transportation, Neptune Shipping, NSP, 120.60, 7600000
 Hospitality, Majestic Hotels, MHT, 137.90, 4500000
 Energy, Radiant Solar, RSO, 150.30, 6800000
 Security, Ironclad Security, ISC, 195.40, 3100000
-

@@ -11,10 +11,13 @@ Game::~Game() {
   delete this->boxInfoContainer;
   delete this->graphContainer;
   delete this->listContainer;
+  delete this->newContainer;
+  delete this->actionContainer;
+  delete this->portfolioContainer;
   delete this->sprite;
   delete this->sprite1;
   delete this->sprite2;
-  delete this->openedAsset;
+  delete this->sprite3;
   for (int i = 0; i < this->numCryptos; i++) {
     delete cryptos[i];
   }
@@ -97,7 +100,8 @@ void Game::eventUpdate() {
             if (this->list[this->listIndex]->getListItem(i)->getText()->getGlobalBounds().contains(
                     this->mousePosView - Vector2f(35, 300)))
             {
-              *this->openedAsset = this->list[this->listIndex]->getListItem(i)->getAsset();
+              this->openedAsset = &(this->list[this->listIndex]->getListItem(i)->getAsset());
+              this->openedAsset->setGraph()->switchGraph();
             }    
           }
           
@@ -180,6 +184,7 @@ void Game::render() {
   this->boxInfoContainer->clear(Color::Transparent);
   this->graphContainer->clear(Color::Transparent);
   this->listContainer->clear(Color::Transparent);
+  this->newContainer->clear(Color::Transparent);
   this->window->clear(Color(126, 169, 121));  // Main background colour
   // render game objects
   // info
@@ -200,15 +205,19 @@ void Game::render() {
     this->renderListItemText(*this->listContainer);
     this->renderTabText(*this->listContainer);
 
+  //news
+  this->renderEventText(*this->newContainer);
   // sprite
   window->draw(*sprite);
   window->draw(*sprite1);
   window->draw(*sprite2);
+  window->draw(*sprite3);
 
   // display flame
   this->boxInfoContainer->display();
   this->graphContainer->display();
   this->listContainer->display();
+  this->newContainer->display();
   this->window->display();
 }
 
@@ -305,7 +314,20 @@ void Game::initBox() {
 
   this->sprite2 = new Sprite(this->listContainer->getTexture());
   this->sprite2->setPosition(Vector2f(35.f, 300.f));
-  
+
+  //Event
+  this->EvenText.setFont(this->openSans);
+  this->EvenText.setFillColor(Color::Black);
+  this->EvenText.setCharacterSize(24);
+  this->EvenText.setString("NULL");
+  this->EvenText.setPosition(Vector2f(1,0));
+
+  this->newContainer = new RenderTexture();
+  this->newContainer->create(GRAPH_WIDTH, 32);
+  this->newContainer->setSmooth(true);
+
+  this->sprite3 = new Sprite(this->newContainer->getTexture());
+  this->sprite3->setPosition(Vector2f(400.f, 125.f));
 }
 
 void Game::initList() {
@@ -316,18 +338,17 @@ void Game::initList() {
 }
 
 void Game::updateListItemText() {
-  for (int i = 0; i < TAB_NUM; i++)
-  {
-    this->typeTab[i].setFillColor(Color::Black);
-    this->typeTab[this->listIndex].setFillColor(Color::White);
-  }
-
-  
   for (int i = 0; i < this->list[this->listIndex]->getIndex(); i++)
   {
     this->list[this->listIndex]->getListItem(i)->updateText();
     this->list[this->listIndex]->getListItem(i)->getText()->setPosition(Vector2f(5.f, 30.f * i + 35));
-    this->list[this->listIndex]->getListItem(i)->getText()->setFillColor(Color::Black);
+    if (this->openedAsset != &(this->list[this->listIndex]->getListItem(i)->getAsset()))
+    {
+      this->list[this->listIndex]->getListItem(i)->getText()->setFillColor(Color::Black);
+    } else{
+      this->list[this->listIndex]->getListItem(i)->getText()->setFillColor(Color::White);
+    }
+    
   }
 }
 
@@ -355,19 +376,19 @@ void Game::updateAsset(bool isEvent, Events *event = nullptr) {
       for (int i = 0; i < this->numStocks; i++) {
       
         this->stocks[i]->updatePrice(event->getEventImpactMean(), event->getEventImpactStdDev(), this->rnd.RandGen(-1,1));
-      
     }
     for (int i = 0; i < this->numCryptos; i++) {
       
         this->cryptos[i]->updatePrice(event->getEventImpactMean(), event->getEventImpactStdDev(), this->rnd.RandGen(-1,1));
-      
     }
     for (int i = 0; i < this->numCryptolizedStock; i++) {
       
-        this->cryptolizedStock[i]->updatePrice(event->getEventImpactMean(), event->getEventImpactStdDev(), this->rnd.RandGen(-1,1));
-      
+        this->cryptolizedStock[i]->updatePrice(event->getEventImpactMean() * 1.1, event->getEventImpactStdDev() * 2, this->rnd.RandGen(-1.2,1.2));
     }
-    isEvent = false;
+      if ((int)rnd.RandGen(1, 31) == gametime.getDay())
+      {
+        isEvent = false;
+      }
     }
   
     this->openedAsset->setGraph()->setminmaxRange_x(this->openedAsset->setGraph()->getminRange_x() + 1, this->openedAsset->setGraph()->getmaxRange_x() + 1);
@@ -377,10 +398,14 @@ void Game::updateAsset(bool isEvent, Events *event = nullptr) {
 }
 
 Events *Game::updateEvent(){
-  isEvent = rnd.eventRandomGen((float)1/3650);
+  isEvent = rnd.eventRandomGen((float)1/3000);
   if (isEvent)
   {
-    return this->events[(int)this->rnd.RandGen(0,this->numEvents)];
+    Events *event = this->events[(int)this->rnd.RandGen(0,this->numEvents)];
+    std::stringstream ss;
+    ss << "!!!" << event->getNameID() << "!!!" << event->getDiscerption();
+    this->EvenText.setString(ss.str());
+    return event;
   }
   return nullptr;
 }
@@ -427,6 +452,13 @@ void Game::renderTabText(RenderTarget &target) {
 void Game::renderListItemText(RenderTarget &target) {
   for (int i = 0; i < this->list[this->listIndex]->getIndex(); i++) {
     target.draw(*this->list[this->listIndex]->getListItem(i)->getText());
+  }
+}
+
+void Game::renderEventText(RenderTarget&target) {
+  if (this->EvenText.getString().toAnsiString() != "NULL" && this->isEvent)
+  {
+    target.draw(this->EvenText);
   }
 }
 
@@ -513,7 +545,7 @@ void Game::initAsset() {
 
   for (int i = 0; i < this->numCryptolizedStock; i++)
   {
-    this->cryptolizedStock[i] = new CryptolizedStock(*dynamic_cast<Stock*>(stocks[(int)this->rnd.RandGen(0,this->numStocks)]));
+    this->cryptolizedStock[i] = new CryptolizedStock(*dynamic_cast<Stock*>(stocks[i]));
   }
 
   this->openedAsset = cryptos[0];

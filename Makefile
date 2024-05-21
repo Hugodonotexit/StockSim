@@ -1,7 +1,7 @@
 # Compiler
 CC=g++
 # Compiler-specific flags
-CXXFLAGS=-Wall -std=c++23 -Ofast
+CXXFLAGS=-Wall -std=c++20 -Ofast
 
 # Add the sanitizer library to linkage if using sanitizers
 LDFLAGS=-fsanitize=address -fsanitize=undefined

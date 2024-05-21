@@ -12,12 +12,12 @@ private:
     Stock *peggedStock;
     randomGen rnd;
 public:
-    CryptolizedStock(Stock &stock) : Crypto(stock.getName(), "NULL", 10, rand() % 10000000 + 10000){
+    CryptolizedStock(Stock &stock) : Crypto(stock.getName(), "NULL", 10, rand() % 1000000 + 10000000){
         peggedStock = &stock;
         std::stringstream ss;
         ss << "X" << peggedStock->getTicker();
         this->setTicker(ss.str());
-        this->shareOwned = this->rnd.RandGen(10000,50000000);
+        this->shareOwned = this->rnd.RandGen(100000,50000000);
         double newPirce = ((float)this->shareOwned / (float)this->getCirculatingAmount()) * peggedStock->getPrice();
         this->setPrice(newPirce);
     }

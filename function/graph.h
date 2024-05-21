@@ -31,6 +31,7 @@ public:
     void updatGraphPrice(float);
     sf::VertexArray getLines();
     void updateLines();
+    void switchGraph();
     ~Graph();
 };
 
