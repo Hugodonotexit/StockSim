@@ -4,7 +4,7 @@ CC=g++
 CXXFLAGS=-Wall -std=c++20 -Ofast
 
 # Add the sanitizer library to linkage if using sanitizers
-LDFLAGS=-fsanitize=address -fsanitize=undefined
+LDFLAGS=#-fsanitize=address -fsanitize=undefined
 
 # Library 
 LIBS=-lsfml-graphics -lsfml-window -lsfml-system
