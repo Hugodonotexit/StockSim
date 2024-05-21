@@ -39,6 +39,8 @@ private:
     Sprite *sprite1 = nullptr;
     Sprite *sprite2 = nullptr;
     Sprite *sprite3 = nullptr;
+    Sprite *sprite4 = nullptr;
+    Sprite *sprite5 = nullptr;
     VideoMode videoMode;
     Event keyEvent;
     RenderTexture *boxInfoContainer = nullptr;
@@ -47,14 +49,15 @@ private:
     RenderTexture *newContainer = nullptr;
     RenderTexture *actionContainer = nullptr;
     RenderTexture *portfolioContainer = nullptr;
-    RectangleShape boxInfo, boxGraph, boxAssetInfo, boxList,boxListTab[3];
+    RectangleShape boxInfo, boxGraph, boxAssetInfo, boxList, boxListTab[3], boxAction, boxPortfolio;
     RectangleShape ButtonBuy, ButtonSell, ButtonAdd, ButtonMinus;
     Font openSans;
     Font pixeBoy;
     Text EvenText;
+    Text plus, minus, buy, sell, shareNum;
     Text infoText[INFOTEXT_LINE];
     Text timeChange[TIMECHANGE_MODE];
-    Text typeTab[TAB_NUM]; 
+    Text typeTab[TAB_NUM];
     
     //Mouse position
     Vector2i mousePosWin;
@@ -75,6 +78,7 @@ private:
     int numStocks = 0, numCryptos = 0, numCryptolizedStock = 0,numEvents = 0;
     int timeScaleIndex = 1, listIndex = 0;
     int oldTime = 0;
+    int numShare;
     double dragOldPostion;
     bool dragging, isEvent = false;
     //int numForexs;
@@ -88,11 +92,13 @@ private:
     Events *updateEvent();
     void updateText();
     void updateListItemText();
+    void updateShareNum();
     void renderInfoText(RenderTarget&);
     void renderTabText(RenderTarget&);
     void renderListItemText(RenderTarget&);
     void renderGraph(RenderTarget&);
     void renderEventText(RenderTarget&);
+    void renderActionText(RenderTarget&);
     void initAsset();
     void initEvents();
     void initList();

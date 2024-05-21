@@ -8,7 +8,7 @@
 #define GRAPH_POS_X 400
 #define GRAPH_POS_Y 175
 #define GRAPH_WIDTH 1400
-#define GRAPH_HEIGHT 700
+#define GRAPH_HEIGHT 600
 
 class Graph
 {

@@ -20,8 +20,8 @@ private:
     float balance, assetValue;
 public:
     Portfolio();
-    void buy(Asset*, int, float);
-    void sell(Asset*, int, float);
+    void buy(Asset*, int);
+    void sell(Asset*, int);
     Portfolio::AssetRecord const getPortfolio(int);
     void setBalance(float);
     void setAssetValue(float);
