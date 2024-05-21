@@ -14,9 +14,7 @@ bool Portfolio::isInPortfolio(Asset* asset) {
   return isInPortfolio;
 }
 
-Portfolio::Portfolio() : balance(100000), assetValue(0) {
-  this->margin = this->balance * 2 + this->assetValue * 1.5;
-};
+Portfolio::Portfolio() : balance(100000), assetValue(0) {}
 void Portfolio::buy(Asset* asset, int amount, float price) {
     if (!this->isInPortfolio(asset)) {
     this->portfolio.push_back({asset, amount, price});
@@ -35,10 +33,7 @@ void Portfolio::setAssetValue(float newAssetValue) {
 };
 float Portfolio::getBalance() const { return this->balance; };
 float Portfolio::getAssetValue() const { return this->assetValue; };
-float Portfolio::getMargin() const { return this->margin; };
-void Portfolio::updateMargin() {
-  this->margin = this->balance * 2 + this->assetValue * 1.5;
-};
+
 
 Portfolio::~Portfolio() {
   for (int i = 0; i < id; i++) {

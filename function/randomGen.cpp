@@ -17,6 +17,11 @@ float randomGen::priceRandomGen(float mean, float stdDev, float skewness) {
     return skewNormalValue;
 }
 
+double randomGen::RandGen(double min, double max) {
+    std::uniform_real_distribution<double> result(min,max);
+    return result(this->seed);
+}
+
 bool randomGen::eventRandomGen(float chance) { 
     std::bernoulli_distribution dist(chance); 
     return dist(this->seed);

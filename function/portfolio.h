@@ -17,7 +17,7 @@ private:
     };
     std::vector<AssetRecord> portfolio;
     bool isInPortfolio(Asset*);
-    float balance, assetValue, margin;
+    float balance, assetValue;
 public:
     Portfolio();
     void buy(Asset*, int, float);
@@ -27,8 +27,6 @@ public:
     void setAssetValue(float);
     float getBalance() const;
     float getAssetValue() const;
-    float getMargin() const;
-    void updateMargin();
     ~Portfolio();
 };
 

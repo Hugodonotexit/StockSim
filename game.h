@@ -43,7 +43,11 @@ private:
     RenderTexture *boxInfoContainer = nullptr;
     RenderTexture *graphContainer = nullptr;
     RenderTexture *listContainer = nullptr;
+    RenderTexture *newContainer = nullptr;
+    RenderTexture *actionContainer = nullptr;
+    RenderTexture *portfolioContainer = nullptr;
     RectangleShape boxInfo, boxGraph, boxAssetInfo, boxList,boxListTab[3];
+    RectangleShape ButtonBuy, ButtonSell, ButtonAdd, ButtonMinus;
     Font openSans;
     Font pixeBoy;
     Text infoText[INFOTEXT_LINE];
@@ -55,6 +59,7 @@ private:
     Vector2f mousePosView;
 
     //Class
+    randomGen rnd;
     Asset** cryptos = nullptr;
     Asset** stocks = nullptr;
     Asset** cryptolizedStock = nullptr;
@@ -69,7 +74,7 @@ private:
     int timeScaleIndex = 1, listIndex = 0;
     int oldTime = 0;
     double dragOldPostion;
-    bool dragging;
+    bool dragging, isEvent = false;
     //int numForexs;
 
     //Objects
@@ -77,7 +82,8 @@ private:
     //Functions
     void initWin();
     void initBox();
-    void updateAsset(Asset*);
+    void updateAsset(bool, Events*);
+    Events *updateEvent();
     void updateText();
     void updateListItemText();
     void renderInfoText(RenderTarget&);

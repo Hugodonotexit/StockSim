@@ -10,6 +10,7 @@ private:
 public:
     randomGen();
     float priceRandomGen(float, float, float);
+    double RandGen(double, double);
     bool eventRandomGen(float);
     ~randomGen();
 };

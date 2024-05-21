@@ -17,6 +17,8 @@ ListItem::ListItem(Asset* newAsset, sf::Font* font) : asset(newAsset) {
   this->text.setString(ss.str());
 }
 
+Asset& ListItem::getAsset(){return *this->asset;}
+
 void ListItem::updateText() {
   std::stringstream ss;
   ss << std::left;

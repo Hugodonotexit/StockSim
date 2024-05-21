@@ -20,6 +20,4 @@ Transportation, Neptune Shipping, NSP, 120.60, 7600000
 Hospitality, Majestic Hotels, MHT, 137.90, 4500000
 Energy, Radiant Solar, RSO, 150.30, 6800000
 Security, Ironclad Security, ISC, 195.40, 3100000
-Construction, Skyline Constructions, SKC, 170.85, 8700000
-Technology, Terra Technologies, TET, 210.15, 9200000
-Venture Capital, Vanguard Ventures, VGV, 225.70, 500000
+

@@ -6,14 +6,14 @@
 #include <algorithm>
 
 #define GRAPH_POS_X 400
-#define GRAPH_POS_Y 300
+#define GRAPH_POS_Y 175
 #define GRAPH_WIDTH 1400
-#define GRAPH_HEIGHT 500
+#define GRAPH_HEIGHT 700
 
 class Graph
 {
 private:
-    std::vector<float> assetPrices = {0,0,0,2,5,6,7,4,3,2,0,0,25,50, 75, 100, 50, 75, 80, 100};
+    std::vector<float> assetPrices = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     double maxPriceRange, minPriceRange, priceRange, scale_y;
     int maxRange_x = this->assetPrices.size();
     int minRange_x = 0;

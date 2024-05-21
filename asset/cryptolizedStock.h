@@ -17,7 +17,7 @@ public:
         std::stringstream ss;
         ss << "X" << peggedStock->getTicker();
         this->setTicker(ss.str());
-        this->shareOwned = peggedStock->getCirculatingShares() / 100 + this->rnd.priceRandomGen(100000,1000,0.25);
+        this->shareOwned = this->rnd.RandGen(10000,50000000);
         double newPirce = ((float)this->shareOwned / (float)this->getCirculatingAmount()) * peggedStock->getPrice();
         this->setPrice(newPirce);
     }

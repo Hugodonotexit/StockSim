@@ -97,7 +97,7 @@ void Game::eventUpdate() {
             if (this->list[this->listIndex]->getListItem(i)->getText()->getGlobalBounds().contains(
                     this->mousePosView - Vector2f(35, 300)))
             {
-              /* code */
+              *this->openedAsset = this->list[this->listIndex]->getListItem(i)->getAsset();
             }    
           }
           
@@ -172,7 +172,7 @@ void Game::update() {
   this->mousePosUpdate();
   this->gametime.updateTime();
   this->updateText();
-  this->updateAsset(nullptr);
+  this->updateAsset(this->isEvent, updateEvent());
   this->updateListItemText();
 }
 void Game::render() {
@@ -327,30 +327,62 @@ void Game::updateListItemText() {
   {
     this->list[this->listIndex]->getListItem(i)->updateText();
     this->list[this->listIndex]->getListItem(i)->getText()->setPosition(Vector2f(5.f, 30.f * i + 35));
+    this->list[this->listIndex]->getListItem(i)->getText()->setFillColor(Color::Black);
   }
 }
 
-void Game::updateAsset(Asset *excludedAsset) {
+void Game::updateAsset(bool isEvent, Events *event = nullptr) {
   if (this->gametime.getDay() != this->oldTime) {
-    for (int i = 0; i < this->numStocks; i++) {
-      if (excludedAsset != this->stocks[i]) {
+    if (!isEvent)
+    {
+      for (int i = 0; i < this->numStocks; i++) {
+      
         this->stocks[i]->updatePrice();
-      }
+      
     }
     for (int i = 0; i < this->numCryptos; i++) {
-      if (excludedAsset != this->cryptos[i]) {
+      
         this->cryptos[i]->updatePrice();
-      }
+      
     }
     for (int i = 0; i < this->numCryptolizedStock; i++) {
-      if (excludedAsset != this->cryptolizedStock[i]) {
+      
         this->cryptolizedStock[i]->updatePrice();
-      }
+      
     }
+    } else 
+    {
+      for (int i = 0; i < this->numStocks; i++) {
+      
+        this->stocks[i]->updatePrice(event->getEventImpactMean(), event->getEventImpactStdDev(), this->rnd.RandGen(-1,1));
+      
+    }
+    for (int i = 0; i < this->numCryptos; i++) {
+      
+        this->cryptos[i]->updatePrice(event->getEventImpactMean(), event->getEventImpactStdDev(), this->rnd.RandGen(-1,1));
+      
+    }
+    for (int i = 0; i < this->numCryptolizedStock; i++) {
+      
+        this->cryptolizedStock[i]->updatePrice(event->getEventImpactMean(), event->getEventImpactStdDev(), this->rnd.RandGen(-1,1));
+      
+    }
+    isEvent = false;
+    }
+  
     this->openedAsset->setGraph()->setminmaxRange_x(this->openedAsset->setGraph()->getminRange_x() + 1, this->openedAsset->setGraph()->getmaxRange_x() + 1);
   }
   this->oldTime = this->gametime.getDay();
   std::this_thread::sleep_for(std::chrono::microseconds(10));
+}
+
+Events *Game::updateEvent(){
+  isEvent = rnd.eventRandomGen((float)1/3650);
+  if (isEvent)
+  {
+    return this->events[(int)this->rnd.RandGen(0,this->numEvents)];
+  }
+  return nullptr;
 }
 
 void Game::updateText() {
@@ -475,14 +507,13 @@ void Game::initAsset() {
   }
 
   //cryptolizedStock
-  srand(rand());
-  this->numCryptolizedStock = (rand() % 10 + 2);
+  this->numCryptolizedStock = this->rnd.RandGen(2,10);
 
   this->cryptolizedStock = new Asset *[this->numCryptolizedStock];
 
   for (int i = 0; i < this->numCryptolizedStock; i++)
   {
-    this->cryptolizedStock[i] = new CryptolizedStock(*dynamic_cast<Stock*>(stocks[rand() % this->numStocks]));
+    this->cryptolizedStock[i] = new CryptolizedStock(*dynamic_cast<Stock*>(stocks[(int)this->rnd.RandGen(0,this->numStocks)]));
   }
 
   this->openedAsset = cryptos[0];
@@ -514,7 +545,12 @@ void Game::initEvents() {
     getline(event_file, event_line);
     std::istringstream iss(event_line);
     std::string name, ticker;
-    iss >> nameID >> discerption >> eventImpactMean >> eventImpactStdDev;
+
+    getline(iss, nameID, ',');
+    getline(iss, discerption, ',');
+    iss >> eventImpactMean;  
+    iss.ignore();  
+    iss >> eventImpactStdDev;
     events[i] =
         new Events(nameID, discerption, eventImpactMean, eventImpactStdDev);
   }

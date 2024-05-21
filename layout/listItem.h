@@ -19,6 +19,7 @@ private:
 public:
     ListItem(Asset*, sf::Font*);
     void updateText();
+    Asset &getAsset();
     sf::Text* getText();
     ~ListItem();
 };
