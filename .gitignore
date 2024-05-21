@@ -7,6 +7,7 @@ compile_commands.json
 *.lo
 *.o
 *.obj
+StockSim
 
 # Precompiled Headers
 *.gch

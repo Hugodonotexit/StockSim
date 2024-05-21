@@ -1,24 +1,20 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include <string>
+#include "portfolio.h"
 
-class Player
+class Player: public Portfolio
 {
 private:
     std::string name;
     int rank;
-    float balance, assetValue;
 public:
     Player();
     Player(std::string, float);
     void setName(std::string);
     void setRank(int);
-    void setBalance(float);
-    void setAssetValue(float);
     std::string getName() const;
     float getRank() const;
-    float getBalance() const;
-    float getAssetValue() const;
     ~Player();
 };
 

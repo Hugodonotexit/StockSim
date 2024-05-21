@@ -16,7 +16,10 @@
 #include "asset/events.h"
 #include "function/gametime.h"
 #include "function/player.h"
+#include "function/portfolio.h"
 #include "function/graph.h"
+#include "layout/list.h"
+#include "layout/listItem.h"
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -34,18 +37,19 @@ private:
     RenderWindow *window = nullptr;
     Sprite *sprite = nullptr;
     Sprite *sprite1 = nullptr;
+    Sprite *sprite2 = nullptr;
     VideoMode videoMode;
     Event keyEvent;
     RenderTexture *boxInfoContainer = nullptr;
     RenderTexture *graphContainer = nullptr;
-    RectangleShape boxInfo, boxGraph;
+    RenderTexture *listContainer = nullptr;
+    RectangleShape boxInfo, boxGraph, boxAssetInfo, boxListTab[3];
     Font openSans;
     Font pixeBoy;
     Text infoText[INFOTEXT_LINE];
     Text timeChange[TIMECHANGE_MODE];
-    View view;
-
-;
+    Text typeTab[TAB_NUM]; 
+    
     //Mouse position
     Vector2i mousePosWin;
     Vector2f mousePosView;
@@ -54,14 +58,15 @@ private:
     Asset** cryptos = nullptr;
     Asset** stocks = nullptr;
     Asset** cryptolizedStock = nullptr;
-    Events** events = nullptr;
     Asset* openedAsset = nullptr;
+    List** list = nullptr;
+    Events** events = nullptr;
     Gametime gametime;
     Player player;
 
     //Var
-    int numStocks, numCryptos, numCryptolizedStock ,numEvents;
-    int timeScaleIndex = 1;
+    int numStocks = 0, numCryptos = 0, numCryptolizedStock = 0,numEvents = 0;
+    int timeScaleIndex = 1, listIndex = 0;
     int oldTime = 0;
     double dragOldPostion;
     bool dragging;
@@ -74,10 +79,14 @@ private:
     void initBox();
     void updateAsset(Asset*);
     void updateText();
-    void renderText(RenderTarget&);
+    void updateListItemText();
+    void renderInfoText(RenderTarget&);
+    void renderTabText(RenderTarget&);
+    void renderListItemText(RenderTarget&);
     void renderGraph(RenderTarget&);
     void initAsset();
     void initEvents();
+    void initList();
     
 public:
     Game();

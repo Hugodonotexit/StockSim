@@ -2,6 +2,7 @@
 Game::Game() {
   this->initWin();
   this->initAsset();
+  this->initList();
   this->initEvents();
   this->initBox();
 }
@@ -9,8 +10,10 @@ Game::~Game() {
   delete this->window;
   delete this->boxInfoContainer;
   delete this->graphContainer;
+  delete this->listContainer;
   delete this->sprite;
   delete this->sprite1;
+  delete this->sprite2;
   delete this->openedAsset;
   for (int i = 0; i < this->numCryptos; i++) {
     delete cryptos[i];
@@ -21,8 +24,13 @@ Game::~Game() {
   }
   for (int i = 0; i < this->numCryptolizedStock; i++)
   {
-    delete cryptolizedStock[i];
+    delete this->cryptolizedStock[i];
   }
+  for (int i = 0; i < TAB_NUM; i++)
+  {
+    delete this->list[i];
+  }
+  
   
   for (int i = 0; i < this->numEvents; i++) {
     delete events[i];
@@ -32,6 +40,7 @@ Game::~Game() {
   delete[] this->stocks;
   delete[] this->events;
   delete[] this->cryptolizedStock;
+  delete[] this->list;
 }
 
 // Public Functions
@@ -142,28 +151,41 @@ void Game::update() {
   this->gametime.updateTime();
   this->updateText();
   this->updateAsset(nullptr);
+  this->updateListItemText();
 }
 void Game::render() {
   // clear flame
   this->boxInfoContainer->clear(Color::Transparent);
   this->graphContainer->clear(Color::Transparent);
+  this->listContainer->clear(Color(108, 156, 99));
   this->window->clear(Color(126, 169, 121));  // Main background colour
   // render game objects
   // info
   this->boxInfoContainer->draw(this->boxInfo);
-  this->renderText(*this->boxInfoContainer);
+  this->renderInfoText(*this->boxInfoContainer);
   // graph
   this->openedAsset->setGraph()->updateLines();
   this->graphContainer->draw(this->boxGraph);
   this->graphContainer->draw(this->openedAsset->setGraph()->getLines());
   this->renderGraph(*this->graphContainer);
 
+  // list
+  for (int i = 0; i < TAB_NUM; i++)
+  {
+    this->listContainer->draw(this->boxListTab[i]);
+  }
+    this->renderListItemText(*this->listContainer);
+    this->renderTabText(*this->listContainer);
+
+  // sprite
   window->draw(*sprite);
   window->draw(*sprite1);
+  window->draw(*sprite2);
 
   // display flame
   this->boxInfoContainer->display();
   this->graphContainer->display();
+  this->listContainer->display();
   this->window->display();
 }
 
@@ -173,8 +195,8 @@ void Game::initWin() {
   this->videoMode.width = 1920;
   this->videoMode.height = 1080;
   this->window = new RenderWindow(this->videoMode, "Stock Sim");
-  this->window->setPosition(Vector2i(0,0));
   this->window->setFramerateLimit(60);
+  this->window->setPosition(Vector2i(0,0));
 
   if (!this->openSans.loadFromFile("font/Opensans/OpenSans-Regular.ttf")) {
     std::cerr << "Failed to open OpenSans-Regular.ttf file." << std::endl;
@@ -189,6 +211,7 @@ void Game::initWin() {
 
 void Game::initBox() {
   // Text & font
+  // InfoBox
   this->boxInfoContainer = new RenderTexture();
   this->boxInfoContainer->create(310, 190);
   this->boxInfoContainer->setSmooth(true);
@@ -229,11 +252,61 @@ void Game::initBox() {
   this->boxGraph.setFillColor(Color(76, 107, 70));
   this->graphContainer = new RenderTexture();
   this->graphContainer->create(GRAPH_WIDTH, GRAPH_HEIGHT);
+  this->graphContainer->setSmooth(true);
   this->sprite1 = new Sprite(this->graphContainer->getTexture());
   this->sprite1->setPosition(Vector2f(GRAPH_POS_X, GRAPH_POS_Y));
+
+  //list
+    for (int i = 0; i < TAB_NUM; i++)
+    {
+        this->boxListTab[i].setSize(Vector2f(103,30.f));
+        this->boxListTab[i].setPosition(Vector2f(103 * i + 0.5,0));
+        this->boxListTab[i].setOutlineThickness(2);
+        this->boxListTab[i].setFillColor(Color(76, 107, 70));
+        this->boxListTab[i].setOutlineColor(Color(3, 146, 27));
+    }
+    
+    this->listContainer = new RenderTexture();
+    this->listContainer->create(310,700);
+    this->listContainer->setSmooth(true);
+
+  for (int i = 0; i < TAB_NUM; i++) {
+    this->typeTab[i].setFont(this->openSans);
+    this->typeTab[i].setFillColor(Color::Black);
+    this->typeTab[i].setCharacterSize(16);
+    this->typeTab[i].setPosition(Vector2f(103 * i + 5, 5));
+    this->typeTab[i].setString(this->list[i]->getName());
+
+  }
+
+  this->sprite2 = new Sprite(this->listContainer->getTexture());
+  this->sprite2->setPosition(Vector2f(35.f, 300.f));
+  
 }
 
-void Game::updateAsset(Asset *excludedAsset = nullptr) {
+void Game::initList() {
+  this->list = new List *[TAB_NUM];
+  this->list[0] = new List("Crypto", this->numCryptos, this->cryptos, &this->openSans);
+  this->list[1] = new List("Stock", this->numStocks, this->stocks, &this->openSans);
+  this->list[2] = new List("Crypto Stock", this->numCryptolizedStock, this->cryptolizedStock, &this->openSans);
+}
+
+void Game::updateListItemText() {
+  for (int i = 0; i < TAB_NUM; i++)
+  {
+    this->typeTab[i].setFillColor(Color::Black);
+    this->typeTab[this->listIndex].setFillColor(Color::White);
+  }
+
+  
+  for (int i = 0; i < this->list[this->listIndex]->getIndex(); i++)
+  {
+    this->list[this->listIndex]->getListItem(i)->updateText();
+    this->list[this->listIndex]->getListItem(i)->getText().setPosition(Vector2f(5.f, 16.f * i + 16));
+  }
+}
+
+void Game::updateAsset(Asset *excludedAsset) {
   if (this->gametime.getDay() != this->oldTime) {
     for (int i = 0; i < this->numStocks; i++) {
       if (excludedAsset != this->stocks[i]) {
@@ -252,8 +325,8 @@ void Game::updateAsset(Asset *excludedAsset = nullptr) {
     }
     this->openedAsset->setGraph()->setminmaxRange_x(this->openedAsset->setGraph()->getminRange_x() + 1, this->openedAsset->setGraph()->getmaxRange_x() + 1);
   }
-  std::this_thread::sleep_for(std::chrono::nanoseconds(500));
   this->oldTime = this->gametime.getDay();
+  std::this_thread::sleep_for(std::chrono::microseconds(10));
 }
 
 void Game::updateText() {
@@ -269,8 +342,7 @@ void Game::updateText() {
 
   ss << std::setw(2) << std::setfill('0') << gametime.getDay() << "/"
      << std::setw(2) << std::setfill('0') << gametime.getMonth() << "/"
-     << std::setw(2) << std::setfill('0')
-     << gametime.getYear();
+     << std::setw(2) << std::setfill('0') << gametime.getYear();
   this->infoText[2].setString(ss.str());
   ss.str("");
 
@@ -279,13 +351,26 @@ void Game::updateText() {
     this->timeChange[gametime.getTimeScaleIndex()].setFillColor(Color::White);
   }
 };
-void Game::renderText(RenderTarget &target) {
+void Game::renderInfoText(RenderTarget &target) {
   for (int i = 0; i < INFOTEXT_LINE; i++) {
     target.draw(this->infoText[i]);
   }
 
   for (int i = 0; i < TIMECHANGE_MODE; i++) {
     target.draw(this->timeChange[i]);
+  }
+}
+
+void Game::renderTabText(RenderTarget &target) {
+  for (int i = 0; i < TAB_NUM; i++)
+  {
+    target.draw(this->typeTab[i]);
+  }
+}
+
+void Game::renderListItemText(RenderTarget &target) {
+  for (int i = 0; i < this->list[this->listIndex]->getIndex(); i++) {
+    target.draw(this->list[this->listIndex]->getListItem(i)->getText());
   }
 }
 
@@ -321,7 +406,13 @@ void Game::initAsset() {
     std::istringstream iss(stock_line);
     std::string name, ticker;
     float price;
-    iss >> sector >> name >> ticker >> price >> circulatingShares;
+    getline(iss, sector, ',');
+    getline(iss, name, ',');
+    getline(iss, ticker, ',');
+    iss >> price;  
+    iss.ignore();  
+    iss >> circulatingShares;
+
     stocks[i] = new Stock(sector, name, ticker, price, circulatingShares);
   }
 
@@ -350,19 +441,24 @@ void Game::initAsset() {
     std::istringstream iss(crypto_line);
     std::string name, ticker;
     float price;
-    iss >> name >> ticker >> price >> circulatingAmount;
+
+    getline(iss, name, ',');
+    getline(iss, ticker, ',');
+    iss >> price;  
+    iss.ignore();  
+    iss >> circulatingAmount;
     cryptos[i] = new Crypto(name, ticker, price, circulatingAmount);
   }
 
   //cryptolizedStock
   srand(rand());
-  this->numCryptolizedStock = (rand() % 2 + 2);
+  this->numCryptolizedStock = (rand() % 10 + 2);
 
   this->cryptolizedStock = new Asset *[this->numCryptolizedStock];
 
   for (int i = 0; i < this->numCryptolizedStock; i++)
   {
-    this->cryptolizedStock[i] = new CryptolizedStock(static_cast<Stock*>(stocks[rand() % 10]));
+    this->cryptolizedStock[i] = new CryptolizedStock(static_cast<Stock*>(stocks[rand() % this->numStocks]));
   }
 
   this->openedAsset = cryptos[0];

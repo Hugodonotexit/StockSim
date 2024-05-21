@@ -1,6 +1,6 @@
 Technology, Redwood Systems, RWS, 154.30, 5000000
 Technology, Quantum Solutions, QMS, 210.45, 8000000
-Consumer Goods, Apex Dynamics, APX, 178.60, 12000000
+Consumer_Goods, Apex Dynamics, APX, 178.60, 12000000
 Industrial, Nova Industries, NIN, 199.99, 9500000
 Technology, Orion Technologies, ORT, 250.75, 15000000
 Financial, Cedar Holdings, CDH, 134.20, 5000000

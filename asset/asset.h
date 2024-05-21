@@ -20,6 +20,9 @@ public:
     std::string getName() const {return this->name;};
     std::string getTicker() const {return this->ticker;};
     void setPrice(float newPrice) {
+        if (newPrice < 1) {
+            newPrice = 1;
+        }
         this->price = newPrice;
         this->setGraph()->updatGraphPrice(this->price);
     };
