@@ -25,6 +25,7 @@ public:
     Portfolio::AssetRecord const getPortfolio(int);
     void setBalance(float);
     void setAssetValue(float);
+    int getID() const;
     float getBalance() const;
     float getAssetValue() const;
     ~Portfolio();

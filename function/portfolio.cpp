@@ -16,7 +16,7 @@ bool Portfolio::isInPortfolio(Asset* asset) {
 
 Portfolio::Portfolio() : balance(100000), assetValue(0) {}
 void Portfolio::buy(Asset* asset, int amount) {
-  double cost = asset->getPrice() * amount;
+  double cost = asset->getPrice() * (double)amount;
   if (cost > balance) {
     return;
   }
@@ -34,14 +34,13 @@ void Portfolio::sell(Asset* asset, int amount) {
         if (amount > this->portfolio[this->locateID].amount) {
             amount = this->portfolio[this->locateID].amount;
         }
-        this->balance += asset->getPrice() * amount;
+        this->portfolio[this->locateID].amount -= amount;
+        this->balance += asset->getPrice() * (double)amount;
         if (this->portfolio[this->locateID].amount == 0) {
-            // If no more of this asset, remove from portfolio
             this->portfolio.erase(this->portfolio.begin() + this->locateID);
-            this->id--;  // Adjust the id count
+            this->id--;  
         }
   } 
-
   return;
 }
 Portfolio::AssetRecord const Portfolio::getPortfolio(int id) {
@@ -51,6 +50,7 @@ void Portfolio::setBalance(float newBalance) { this->balance = newBalance; };
 void Portfolio::setAssetValue(float newAssetValue) {
   this->assetValue = newAssetValue;
 };
+int Portfolio::getID() const {return this->id;};
 float Portfolio::getBalance() const { return this->balance; };
 float Portfolio::getAssetValue() const { return this->assetValue; };
 

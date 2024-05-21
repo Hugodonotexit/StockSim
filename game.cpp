@@ -118,80 +118,80 @@ void Game::eventUpdate() {
             if (this->numShare > 0) {
               this->numShare--;
             }
+          } else if (this->ButtonBuy.getGlobalBounds().contains(
+                         this->mousePosView - Vector2f(400, 800))) {
+            this->player.buy(this->openedAsset, this->numShare);
+            this->numShare = 0;
+          } else if (this->ButtonSell.getGlobalBounds().contains(
+                         this->mousePosView - Vector2f(400, 800))) {
+            this->player.sell(this->openedAsset, this->numShare);
+            this->numShare = 0;
           }
-        } else if (this->ButtonBuy.getGlobalBounds().contains(
-                       this->mousePosView - Vector2f(400, 800))) {
-          this->player.buy(this->openedAsset, this->numShare);
-          this->numShare = 0;
-        } else if (this->ButtonSell.getGlobalBounds().contains(
-                       this->mousePosView - Vector2f(400, 800))) {
-          this->player.sell(this->openedAsset, this->numShare);
-          this->numShare = 0;
         }
-    break;
-    case Event::MouseButtonReleased:
-      if (Mouse::Left) {
-        this->dragging = false;
-      }
-      break;
-    case Event::MouseMoved:
-      if (this->dragging && this->gametime.getTimeScaleIndex() == 0) {
-        int move = (mousePosView.x - dragOldPostion);
-        this->openedAsset->setGraph()->setminmaxRange_x(
-            (int)(this->openedAsset->setGraph()->getminRange_x() - move),
-            (int)(this->openedAsset->setGraph()->getmaxRange_x() - move));
-      }
-      break;
-    case Event::MouseWheelScrolled:
-      if (this->boxGraph.getGlobalBounds().contains(
-              this->mousePosView - Vector2f(GRAPH_POS_X, GRAPH_POS_Y))) {
-        this->openedAsset->setGraph()->setminRange_x(
-            (int)(this->openedAsset->setGraph()->getminRange_x() +
-                  keyEvent.mouseWheelScroll.delta));
-      }
-      break;
-    case Event::KeyPressed:
-      switch (keyEvent.key.code) {
-        case Keyboard::Escape:
-          this->window->close();
-          break;
-        case Keyboard::Num0:
-          this->gametime.setTimeScaleIndex(0);
-          break;
-        case Keyboard::Num1:
-          this->timeScaleIndex = 1;
-          this->gametime.setTimeScaleIndex(this->timeScaleIndex);
-          break;
-        case Keyboard::Num2:
-          this->timeScaleIndex = 2;
-          this->gametime.setTimeScaleIndex(this->timeScaleIndex);
-          break;
-        case Keyboard::Num3:
-          this->timeScaleIndex = 3;
-          this->gametime.setTimeScaleIndex(this->timeScaleIndex);
-          break;
-        case Keyboard::Num4:
-          this->timeScaleIndex = 4;
-          this->gametime.setTimeScaleIndex(this->timeScaleIndex);
-          break;
-        case Keyboard::Space:
-        case Keyboard::P:
-          if (gametime.getTimeScaleIndex() != 0) {
+        break;
+      case Event::MouseButtonReleased:
+        if (Mouse::Left) {
+          this->dragging = false;
+        }
+        break;
+      case Event::MouseMoved:
+        if (this->dragging && this->gametime.getTimeScaleIndex() == 0) {
+          int move = (mousePosView.x - dragOldPostion);
+          this->openedAsset->setGraph()->setminmaxRange_x(
+              (int)(this->openedAsset->setGraph()->getminRange_x() - move),
+              (int)(this->openedAsset->setGraph()->getmaxRange_x() - move));
+        }
+        break;
+      case Event::MouseWheelScrolled:
+        if (this->boxGraph.getGlobalBounds().contains(
+                this->mousePosView - Vector2f(GRAPH_POS_X, GRAPH_POS_Y))) {
+          this->openedAsset->setGraph()->setminRange_x(
+              (int)(this->openedAsset->setGraph()->getminRange_x() +
+                    keyEvent.mouseWheelScroll.delta));
+        }
+        break;
+      case Event::KeyPressed:
+        switch (keyEvent.key.code) {
+          case Keyboard::Escape:
+            this->window->close();
+            break;
+          case Keyboard::Num0:
             this->gametime.setTimeScaleIndex(0);
-          } else {
+            break;
+          case Keyboard::Num1:
+            this->timeScaleIndex = 1;
             this->gametime.setTimeScaleIndex(this->timeScaleIndex);
-          }
-          break;
-        default:
-          /*keep emptry*/
-          break;
-      }
-      break;
-    default:
-      /*keep emptry*/
-      break;
+            break;
+          case Keyboard::Num2:
+            this->timeScaleIndex = 2;
+            this->gametime.setTimeScaleIndex(this->timeScaleIndex);
+            break;
+          case Keyboard::Num3:
+            this->timeScaleIndex = 3;
+            this->gametime.setTimeScaleIndex(this->timeScaleIndex);
+            break;
+          case Keyboard::Num4:
+            this->timeScaleIndex = 4;
+            this->gametime.setTimeScaleIndex(this->timeScaleIndex);
+            break;
+          case Keyboard::Space:
+          case Keyboard::P:
+            if (gametime.getTimeScaleIndex() != 0) {
+              this->gametime.setTimeScaleIndex(0);
+            } else {
+              this->gametime.setTimeScaleIndex(this->timeScaleIndex);
+            }
+            break;
+          default:
+            /*keep emptry*/
+            break;
+        }
+        break;
+      default:
+        /*keep emptry*/
+        break;
+    }
   }
-}
 }
 void Game::update() {
   this->eventUpdate();
@@ -201,6 +201,7 @@ void Game::update() {
   this->updateAsset(this->isEvent, updateEvent());
   this->updateListItemText();
   this->updateShareNum();
+  this->updatePortfolio();
 }
 void Game::render() {
   // clear flame
@@ -215,6 +216,7 @@ void Game::render() {
   // info
   this->boxInfoContainer->draw(this->boxInfo);
   this->renderInfoText(*this->boxInfoContainer);
+
   // graph
   this->openedAsset->setGraph()->updateLines();
   this->graphContainer->draw(this->boxGraph);
@@ -229,23 +231,30 @@ void Game::render() {
   this->renderListItemText(*this->listContainer);
   this->renderTabText(*this->listContainer);
 
+  // news
+  this->renderEventText(*this->newContainer);
+
   // action
   this->actionContainer->draw(this->boxAction);
-
   this->actionContainer->draw(this->ButtonAdd);
   this->actionContainer->draw(this->ButtonMinus);
   this->actionContainer->draw(this->ButtonBuy);
   this->actionContainer->draw(this->ButtonSell);
   this->renderActionText(*this->actionContainer);
 
-  // news
-  this->renderEventText(*this->newContainer);
+  // portfolio
+  for (int i = 0; i < 3; i++) {
+    this->portfolioContainer->draw(this->boxPortfolio[i]);
+  }
+  this->renderPortfolioText(*this->portfolioContainer);
+
   // sprite
   window->draw(*sprite);
   window->draw(*sprite1);
   window->draw(*sprite2);
   window->draw(*sprite3);
   window->draw(*sprite4);
+  window->draw(*sprite5);
 
   // display flame
   this->boxInfoContainer->display();
@@ -253,6 +262,7 @@ void Game::render() {
   this->listContainer->display();
   this->newContainer->display();
   this->actionContainer->display();
+  this->portfolioContainer->display();
   this->window->display();
 }
 
@@ -261,7 +271,8 @@ void Game::render() {
 void Game::initWin() {
   this->videoMode.width = 1920;
   this->videoMode.height = 1080;
-  this->window = new RenderWindow(this->videoMode, "Stock Sim");
+  this->window =
+      new RenderWindow(this->videoMode, "Stock Sim", Style::Fullscreen);
   this->window->setFramerateLimit(60);
   this->window->setPosition(Vector2i(0, 0));
 
@@ -363,8 +374,8 @@ void Game::initBox() {
   this->sprite3->setPosition(Vector2f(400.f, 125.f));
 
   // Action
-  this->boxGraph.setSize(Vector2f(400, 800));
-  this->boxGraph.setFillColor(Color::Transparent);
+  this->boxAction.setSize(Vector2f(400, 200));
+  this->boxAction.setFillColor(Color::Transparent);
 
   this->ButtonAdd.setSize(Vector2f(72, 72));
   this->ButtonAdd.setFillColor(Color::Black);
@@ -418,6 +429,32 @@ void Game::initBox() {
 
   this->sprite4 = new Sprite(this->actionContainer->getTexture());
   this->sprite4->setPosition(Vector2f(400.f, 800.f));
+
+  // portfolio
+  this->portfolioContainer = new RenderTexture();
+  this->portfolioContainer->create(900, 200);
+  this->portfolioContainer->setSmooth(true);
+
+  for (int i = 0; i < TAB_NUM; i++) {
+    this->boxPortfolio[i].setSize(Vector2f(300, 200));
+    this->boxPortfolio[i].setFillColor(Color::Black);
+    this->boxPortfolio[i].setPosition(Vector2f(300 * i, 0));
+    this->boxPortfolio[i].setOutlineThickness(3);
+    this->boxPortfolio[i].setOutlineColor(Color::White);
+  }
+
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 7; j++) {
+      this->portfolioAsset[i][j].setFont(this->openSans);
+      this->portfolioAsset[i][j].setFillColor(Color::White);
+      this->portfolioAsset[i][j].setCharacterSize(14);
+      this->portfolioAsset[i][j].setString(" ");
+      this->portfolioAsset[i][j].setPosition(Vector2f(5 + 300 * i, 18 * j));
+    }
+  }
+
+  this->sprite5 = new Sprite(this->portfolioContainer->getTexture());
+  this->sprite5->setPosition(Vector2f(900.f, 800.f));
 }
 
 void Game::initList() {
@@ -512,7 +549,7 @@ void Game::updateText() {
   this->infoText[0].setString(ss.str());
   ss.str("");
 
-  ss << "Balance: $" << player.getBalance();
+  ss << std::fixed << "Bal: $" << player.getBalance();
   this->infoText[1].setString(ss.str());
   ss.str("");
 
@@ -526,7 +563,34 @@ void Game::updateText() {
     this->timeChange[i].setFillColor(Color::Black);
     this->timeChange[gametime.getTimeScaleIndex()].setFillColor(Color::White);
   }
-};
+}
+
+void Game::updatePortfolio() {
+  int k = 0;
+  int num = this->player.getID();
+  for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 7; j++) {
+        if (num != 0)
+        {
+          std::stringstream ss;
+        ss << std::left;
+        ss << std::setw(6) << std::setfill(' ')
+           << this->player.getPortfolio(k).asset->getTicker();
+        ss << "|$";
+        ss << std::fixed << std::setprecision(2) 
+           << std::setw(9) << std::setfill(' ')
+           << this->player.getPortfolio(k).price;
+        ss << "|";
+        ss << std::setw(10) << std::setfill(' ')
+           << this->player.getPortfolio(k++).amount;
+        this->portfolioAsset[i][j].setString(ss.str());
+        num--;
+        } else {
+          this->portfolioAsset[i][j].setString(" ");
+        }
+      }
+  }
+}
 void Game::renderInfoText(RenderTarget &target) {
   for (int i = 0; i < INFOTEXT_LINE; i++) {
     target.draw(this->infoText[i]);
@@ -565,6 +629,14 @@ void Game::renderActionText(RenderTarget &target) {
 
 void Game::renderGraph(RenderTarget &target) {
   target.draw(this->openedAsset->setGraph()->getLines());
+}
+
+void Game::renderPortfolioText(RenderTarget &target) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 7; j++) {
+      target.draw(this->portfolioAsset[i][j]);
+    }
+  }
 }
 
 void Game::initAsset() {

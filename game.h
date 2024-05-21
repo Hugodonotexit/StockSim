@@ -49,7 +49,7 @@ private:
     RenderTexture *newContainer = nullptr;
     RenderTexture *actionContainer = nullptr;
     RenderTexture *portfolioContainer = nullptr;
-    RectangleShape boxInfo, boxGraph, boxAssetInfo, boxList, boxListTab[3], boxAction, boxPortfolio;
+    RectangleShape boxInfo, boxGraph, boxAssetInfo, boxList, boxListTab[TAB_NUM], boxAction, boxPortfolio[3];
     RectangleShape ButtonBuy, ButtonSell, ButtonAdd, ButtonMinus;
     Font openSans;
     Font pixeBoy;
@@ -58,6 +58,7 @@ private:
     Text infoText[INFOTEXT_LINE];
     Text timeChange[TIMECHANGE_MODE];
     Text typeTab[TAB_NUM];
+    Text portfolioAsset[3][8];
     
     //Mouse position
     Vector2i mousePosWin;
@@ -78,7 +79,7 @@ private:
     int numStocks = 0, numCryptos = 0, numCryptolizedStock = 0,numEvents = 0;
     int timeScaleIndex = 1, listIndex = 0;
     int oldTime = 0;
-    int numShare;
+    int numShare = 0;
     double dragOldPostion;
     bool dragging, isEvent = false;
     //int numForexs;
@@ -93,12 +94,14 @@ private:
     void updateText();
     void updateListItemText();
     void updateShareNum();
+    void updatePortfolio();
     void renderInfoText(RenderTarget&);
     void renderTabText(RenderTarget&);
     void renderListItemText(RenderTarget&);
     void renderGraph(RenderTarget&);
     void renderEventText(RenderTarget&);
     void renderActionText(RenderTarget&);
+    void renderPortfolioText(RenderTarget&);
     void initAsset();
     void initEvents();
     void initList();
