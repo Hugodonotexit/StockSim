@@ -31,4 +31,4 @@ void ListItem::updateText() {
 }
 sf::Text* ListItem::getText() { return &this->text; }
 
-ListItem::~ListItem() { delete this->asset; }
+ListItem::~ListItem() {}

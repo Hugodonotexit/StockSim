@@ -7,42 +7,111 @@ Game::Game() {
   this->initBox();
 }
 Game::~Game() {
-  delete this->window;
-  delete this->boxInfoContainer;
-  delete this->graphContainer;
-  delete this->listContainer;
-  delete this->newContainer;
-  delete this->actionContainer;
-  delete this->portfolioContainer;
-  delete this->sprite;
-  delete this->sprite1;
-  delete this->sprite2;
-  delete this->sprite3;
-  delete this->sprite4;
-  delete this->sprite5;
+  
   for (int i = 0; i < this->numCryptos; i++) {
-    delete cryptos[i];
+    if (this->cryptos[i] != nullptr) {
+      delete this->cryptos[i];
+      this->cryptos[i] = nullptr;
+    }
   }
 
   for (int i = 0; i < this->numStocks; i++) {
-    delete stocks[i];
+    if (this->stocks[i] != nullptr) {
+      delete this->stocks[i];
+      this->stocks[i] = nullptr;
+    }
   }
   for (int i = 0; i < this->numCryptolizedStock; i++) {
-    delete this->cryptolizedStock[i];
+    if (this->cryptolizedStock[i] != nullptr) {
+      delete this->cryptolizedStock[i];
+      this->cryptolizedStock[i] = nullptr;
+    }
   }
   for (int i = 0; i < TAB_NUM; i++) {
-    delete this->list[i];
+    if (this->list[i] != nullptr) {
+      delete this->list[i];
+      this->list[i] = nullptr;
+    }
   }
 
   for (int i = 0; i < this->numEvents; i++) {
-    delete events[i];
+    if (this->events[i] != nullptr) {
+      delete this->events[i];
+      this->events[i] = nullptr;
+    }
   }
-
-  delete[] this->cryptos;
-  delete[] this->stocks;
-  delete[] this->events;
-  delete[] this->cryptolizedStock;
-  delete[] this->list;
+  if (this->cryptos != nullptr) {
+    delete[] this->cryptos;
+    this->cryptos = nullptr;
+  }
+  if (this->stocks != nullptr) {
+    delete[] this->stocks;
+    this->stocks = nullptr;
+  }
+  if (this->events != nullptr) {
+    delete[] this->events;
+    this->events = nullptr;
+  }
+  if (this->cryptolizedStock != nullptr) {
+    delete[] this->cryptolizedStock;
+    this->cryptolizedStock = nullptr;
+  }
+  if (this->list != nullptr) {
+    delete[] this->list;
+    this->list = nullptr;
+  }
+  if (this->boxInfoContainer != nullptr) {
+    delete this->boxInfoContainer;
+    this->boxInfoContainer = nullptr;
+  }
+  if (this->graphContainer != nullptr) {
+    delete this->graphContainer;
+    this->graphContainer = nullptr;
+  }
+  if (this->listContainer != nullptr) {
+    delete this->listContainer;
+    this->listContainer = nullptr;
+  }
+  if (this->newContainer != nullptr) {
+    delete this->newContainer;
+    this->newContainer = nullptr;
+  }
+  if (this->actionContainer != nullptr) {
+    delete this->actionContainer;
+    this->actionContainer = nullptr;
+  }
+  if (this->portfolioContainer != nullptr) {
+    delete this->portfolioContainer;
+    this->portfolioContainer = nullptr;
+  }
+  if (this->sprite != nullptr) {
+    delete this->sprite;
+    this->sprite = nullptr;
+  }
+  if (this->sprite1 != nullptr) {
+    delete this->sprite1;
+    this->sprite1 = nullptr;
+  }
+  if (this->sprite2 != nullptr) {
+    delete this->sprite2;
+    this->sprite2 = nullptr;
+  }
+  if (this->sprite3 != nullptr) {
+    delete this->sprite3;
+    this->sprite3 = nullptr;
+  }
+  if (this->sprite4 != nullptr) {
+    delete this->sprite4;
+    this->sprite4 = nullptr;
+  }
+  if (this->sprite5 != nullptr) {
+    delete this->sprite5;
+    this->sprite5 = nullptr;
+  }
+  if (this->window != nullptr) {
+    delete this->window;
+    this->window = nullptr;
+  }
 }
 
 // Public Functions
@@ -569,26 +638,24 @@ void Game::updatePortfolio() {
   int k = 0;
   int num = this->player.getID();
   for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 7; j++) {
-        if (num != 0)
-        {
-          std::stringstream ss;
+    for (int j = 0; j < 7; j++) {
+      if (num != 0) {
+        std::stringstream ss;
         ss << std::left;
         ss << std::setw(6) << std::setfill(' ')
            << this->player.getPortfolio(k).asset->getTicker();
         ss << "|$";
-        ss << std::fixed << std::setprecision(2) 
-           << std::setw(9) << std::setfill(' ')
-           << this->player.getPortfolio(k).price;
+        ss << std::fixed << std::setprecision(2) << std::setw(9)
+           << std::setfill(' ') << this->player.getPortfolio(k).price;
         ss << "|";
         ss << std::setw(10) << std::setfill(' ')
            << this->player.getPortfolio(k++).amount;
         this->portfolioAsset[i][j].setString(ss.str());
         num--;
-        } else {
-          this->portfolioAsset[i][j].setString(" ");
-        }
+      } else {
+        this->portfolioAsset[i][j].setString(" ");
       }
+    }
   }
 }
 void Game::renderInfoText(RenderTarget &target) {

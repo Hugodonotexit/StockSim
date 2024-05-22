@@ -82,9 +82,6 @@ private:
     int numShare = 0;
     double dragOldPostion;
     bool dragging, isEvent = false;
-    //int numForexs;
-
-    //Objects
 
     //Functions
     void initWin();
