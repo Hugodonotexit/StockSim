@@ -1,4 +1,4 @@
-#include "randomGen.h"
+#include "../include/randomGen.h"
 
 randomGen::randomGen() {
     std::mt19937 gen1(this->randSeed());

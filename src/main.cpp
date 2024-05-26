@@ -1,5 +1,5 @@
 #include <iostream>
-#include "game.h"
+#include "../include/game.h"
 
 int main() {
   // Init Game engine

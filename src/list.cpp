@@ -1,4 +1,4 @@
-#include "list.h"
+#include "../include/list.h"
 
 List::List(std::string newName, int newNum, Asset** asset, sf::Font *font): name(newName), num(newNum) {
     this->listItem = new ListItem *[num];

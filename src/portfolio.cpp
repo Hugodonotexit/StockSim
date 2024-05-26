@@ -1,4 +1,4 @@
-#include "portfolio.h"
+#include "../include/portfolio.h"
 
 bool Portfolio::isInPortfolio(Asset* asset) {
   bool isInPortfolio = false;

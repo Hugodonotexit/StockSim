@@ -1,4 +1,4 @@
-#include "gametime.h"
+#include "../include/gametime.h"
 
 Gametime::Gametime()
     : timeScaleIndex(0), minute(0), hour(0), day(1), month(1), year(1939) {

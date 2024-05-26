@@ -1,9 +1,9 @@
 #ifndef LISTITEM_H
 #define LISTITEM_H
-#include "../asset/cryptolizedStock.h"
-#include "../asset/crypto.h"
-#include "../asset/stock.h"
-#include "../asset/asset.h"
+#include "asset/cryptolizedStock.h"
+#include "asset/crypto.h"
+#include "asset/stock.h"
+#include "asset/asset.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>

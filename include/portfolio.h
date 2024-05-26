@@ -1,7 +1,7 @@
 #ifndef PORTFOLIO_H
 #define PORTFOLIO_H
 
-#include "../asset/asset.h"
+#include "asset/asset.h"
 #include <vector>
 
 

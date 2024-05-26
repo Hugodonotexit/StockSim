@@ -16,10 +16,10 @@ endif
 LDFLAGS=
 
 # Source files
-SRC=main.cpp game.cpp function/gametime.cpp function/randomGen.cpp function/player.cpp function/graph.cpp function/portfolio.cpp layout/list.cpp layout/listItem.cpp
+SRC=src/main.cpp src/game.cpp src/gametime.cpp src/randomGen.cpp src/player.cpp src/graph.cpp src/portfolio.cpp src/list.cpp src/listItem.cpp
 
 # Header files
-DEPS=game.h function/randomGet.h function/gametime.h function/player.h function/graph.h function/portfolio.h asset/asset.h asset/crypto.h asset/forex.h asset/stock.h layout/list.h layout/listItem.h
+DEPS=include/game.h include/randomGet.h include/gametime.h include/player.h include/graph.h include/portfolio.h include/asset.h include/crypto.h include/forex.h include/stock.h include/list.h include/listItem.h
 
 # Convert source filenames from .cpp to .o
 OBJ=$(SRC:.cpp=.o)

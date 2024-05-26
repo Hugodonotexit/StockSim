@@ -1,10 +1,10 @@
 #ifndef LIST_H
 #define LIST_H
 #include "listItem.h"
-#include "../asset/cryptolizedStock.h"
-#include "../asset/crypto.h"
-#include "../asset/stock.h"
-#include "../asset/asset.h"
+#include "asset/cryptolizedStock.h"
+#include "asset/crypto.h"
+#include "asset/stock.h"
+#include "asset/asset.h"
 #include <string>
 #define TAB_NUM 3
 

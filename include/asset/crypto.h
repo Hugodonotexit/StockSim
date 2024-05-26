@@ -2,7 +2,7 @@
 #define CRYPTO_H
 #include "asset.h"
 #include "events.h"
-#include "../function/randomGen.h"
+#include "../randomGen.h"
 #include <string>
 
 class Crypto: public Asset

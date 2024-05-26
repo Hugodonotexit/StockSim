@@ -1,4 +1,4 @@
-#include "listItem.h"
+#include "../include/listItem.h"
 
 ListItem::ListItem(Asset* newAsset, sf::Font* font) : asset(newAsset) {
   this->text.setFont(*font);

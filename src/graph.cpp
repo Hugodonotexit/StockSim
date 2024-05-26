@@ -1,4 +1,4 @@
-#include "graph.h"
+#include "../include/graph.h"
 void Graph::calculatePriceRange()
 {
     if (assetPrices.empty())
